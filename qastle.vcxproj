@@ -82,7 +82,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qastle.cpp" />
-    <ClCompile Include="TableModel.cpp" />
+    <ClCompile Include="table_model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qastle.h" />
@@ -94,7 +94,7 @@
     <QtRcc Include="qastle.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="TableModel.h" />
+    <QtMoc Include="table_model.h" />
     <ClInclude Include="x64\Debug\uic\ui_qastle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

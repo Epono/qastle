@@ -1,5 +1,5 @@
 #include "qastle.h"
-#include "TableModel.h"
+#include "table_model.h"
 #include <QMenu>
 #include <QDebug>
 #include <QInputDialog>

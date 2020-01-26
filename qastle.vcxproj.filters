@@ -31,7 +31,7 @@
     <ClCompile Include="qastle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TableModel.cpp">
+    <ClCompile Include="table_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,7 +39,7 @@
     <QtMoc Include="qastle.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="TableModel.h">
+    <QtMoc Include="table_model.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

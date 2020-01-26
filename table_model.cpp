@@ -1,4 +1,4 @@
-#include "TableModel.h"
+#include "table_model.h"
 
 #include <QDebug>
 
