@@ -25,37 +25,43 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="qastle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="table_model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="x64\Debug\uic\ui_qastle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="x64\Debug\uic\ui_column.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="qastle.h">
+    <QtMoc Include="include\qastle.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="table_model.h">
+    <QtMoc Include="include\table_model.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="qastle.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qastle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\table_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="qastle.qrc">
+    <QtRcc Include="Resources\qastle.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="x64\Debug\uic\ui_qastle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <QtUic Include="ui\column.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ui\qastle.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

@@ -38,6 +38,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)\include;$(OutDir)\uic\ui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
@@ -80,22 +83,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="qastle.cpp" />
-    <ClCompile Include="table_model.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="qastle.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="qastle.ui" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="qastle.qrc" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="table_model.h" />
+    <QtMoc Include="include\qastle.h" />
+    <QtMoc Include="include\table_model.h" />
+    <ClInclude Include="x64\Debug\uic\ui_column.h" />
     <ClInclude Include="x64\Debug\uic\ui_qastle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\qastle.cpp" />
+    <ClCompile Include="src\table_model.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resources\qastle.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ui\column.ui" />
+    <QtUic Include="ui\qastle.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
