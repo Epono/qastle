@@ -1,11 +1,11 @@
-#include "QasTleDB.h"
+#include "qastle.h"
 #include "TableModel.h"
 #include <QMenu>
 #include <QDebug>
 #include <QInputDialog>
 #include <QDir>
 
-QasTleDB::QasTleDB(QWidget *parent)
+Qastle::Qastle(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -19,22 +19,22 @@ QasTleDB::QasTleDB(QWidget *parent)
 	ui.tableWidget->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui.tableWidget->verticalHeader()->setMinimumWidth(20);
 
-	connect(ui.tableWidget, &QWidget::customContextMenuRequested, this, &QasTleDB::showContextMenuGrid);
+	connect(ui.tableWidget, &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuGrid);
 
 	ui.statusbar->showMessage(QString("looool"));
 
-	connect(ui.actionRien, &QAction::triggered, this, &QasTleDB::rien);
+	connect(ui.actionRien, &QAction::triggered, this, &Qastle::rien);
 
-	connect(ui.tabWidget, &QTabWidget::currentChanged, this, &QasTleDB::tabSelected);
-	connect(ui.tabWidget, &QTabWidget::tabBarDoubleClicked, this, &QasTleDB::tabDoubleClicked);
+	connect(ui.tabWidget, &QTabWidget::currentChanged, this, &Qastle::tabSelected);
+	connect(ui.tabWidget, &QTabWidget::tabBarDoubleClicked, this, &Qastle::tabDoubleClicked);
 
-	connect(ui.tableWidget->horizontalHeader(), &QWidget::customContextMenuRequested, this, &QasTleDB::showContextMenuHorizontalHeader);
-	connect(ui.tableWidget->verticalHeader(), &QWidget::customContextMenuRequested, this, &QasTleDB::showContextMenuVerticalHeader);
+	connect(ui.tableWidget->horizontalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuHorizontalHeader);
+	connect(ui.tableWidget->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuVerticalHeader);
 
-	connect(ui.tableWidget->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &QasTleDB::horizontalHeaderDoubleClicked);
+	connect(ui.tableWidget->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::horizontalHeaderDoubleClicked);
 }
 
-void QasTleDB::horizontalHeaderDoubleClicked(int logicalIndex) {
+void Qastle::horizontalHeaderDoubleClicked(int logicalIndex) {
 	bool ok;
 
 	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
@@ -49,7 +49,7 @@ void QasTleDB::horizontalHeaderDoubleClicked(int logicalIndex) {
 	}
 }
 
-void QasTleDB::tabDoubleClicked(const int selectedTabIndex) {
+void Qastle::tabDoubleClicked(const int selectedTabIndex) {
 	bool ok;
 	QString text = QInputDialog::getText(this, QString("Change name"), QString("Sheet name"), QLineEdit::Normal, ui.tabWidget->tabText(selectedTabIndex), &ok);
 	if (ok && !text.isEmpty()) {
@@ -59,7 +59,7 @@ void QasTleDB::tabDoubleClicked(const int selectedTabIndex) {
 }
 
 //https://stackoverflow.com/questions/8308588/how-to-identify-when-the-current-tab-is-changing-in-a-qtabwidget
-void QasTleDB::tabSelected(const int selectedTabIndex) {
+void Qastle::tabSelected(const int selectedTabIndex) {
 	QString text(ui.tabWidget->tabText(selectedTabIndex));
 	if (text.compare(QString("+")) == 0) {
 		QWidget* newTab = new QWidget(ui.tabWidget);
@@ -70,11 +70,11 @@ void QasTleDB::tabSelected(const int selectedTabIndex) {
 	}
 }
 
-void QasTleDB::rien() {
+void Qastle::rien() {
 	qDebug() << "lol";
 }
 
-void QasTleDB::showContextMenuGrid(const QPoint& pos) {
+void Qastle::showContextMenuGrid(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
@@ -96,7 +96,7 @@ void QasTleDB::showContextMenuGrid(const QPoint& pos) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // HORIZONTAL HEADER
-void QasTleDB::showContextMenuHorizontalHeader(const QPoint& pos) {
+void Qastle::showContextMenuHorizontalHeader(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
@@ -104,41 +104,41 @@ void QasTleDB::showContextMenuHorizontalHeader(const QPoint& pos) {
 	if (index.isValid()) {
 		QAction* actionRemoveColumn = new QAction(QString("Remove column %1").arg(index.column()), this);
 		actionRemoveColumn->setData(index);
-		connect(actionRemoveColumn, &QAction::triggered, this, &QasTleDB::slotRemoveColumn);
+		connect(actionRemoveColumn, &QAction::triggered, this, &Qastle::slotRemoveColumn);
 		menu->addAction(actionRemoveColumn);
 
 		QAction* actionPrependColumn = new QAction(QString("Insert before column %1").arg(index.column()), this);
 		actionPrependColumn->setData(index);
-		connect(actionPrependColumn, &QAction::triggered, this, &QasTleDB::slotPrependColumn);
+		connect(actionPrependColumn, &QAction::triggered, this, &Qastle::slotPrependColumn);
 		menu->addAction(actionPrependColumn);
 	}
 
 	QAction* actionAppendColumn = new QAction(QString("Insert after column %1").arg(index.column()), this);
 	actionAppendColumn->setData(index);
-	connect(actionAppendColumn, &QAction::triggered, this, &QasTleDB::slotAppendColumn);
+	connect(actionAppendColumn, &QAction::triggered, this, &Qastle::slotAppendColumn);
 	menu->addAction(actionAppendColumn);
 
 	menu->popup(ui.tableWidget->viewport()->mapToGlobal(pos));
 }
 
-void QasTleDB::slotRemoveColumn() {
+void Qastle::slotRemoveColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->removeColumn(index.column(), index);
 }
 
-void QasTleDB::slotPrependColumn() {
+void Qastle::slotPrependColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertColumn(index.column(), index);
 }
 
-void QasTleDB::slotAppendColumn() {
+void Qastle::slotAppendColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertColumn(index.column() + 1, index);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // VERTICAL HEADER
-void QasTleDB::showContextMenuVerticalHeader(const QPoint& pos) {
+void Qastle::showContextMenuVerticalHeader(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
@@ -146,35 +146,35 @@ void QasTleDB::showContextMenuVerticalHeader(const QPoint& pos) {
 	if (index.isValid()) {
 		QAction* actionRemoveRow = new QAction(QString("Remove row %1").arg(index.row()), this);
 		actionRemoveRow->setData(index);
-		connect(actionRemoveRow, &QAction::triggered, this, &QasTleDB::slotRemoveRow);
+		connect(actionRemoveRow, &QAction::triggered, this, &Qastle::slotRemoveRow);
 		menu->addAction(actionRemoveRow);
 		
 		QAction* actionPrependRow = new QAction(QString("Insert before row %1").arg(index.row()), this);
 		actionPrependRow->setData(index);
-		connect(actionPrependRow, &QAction::triggered, this, &QasTleDB::slotPrependRow);
+		connect(actionPrependRow, &QAction::triggered, this, &Qastle::slotPrependRow);
 		menu->addAction(actionPrependRow);
 	}
 
 	QAction* actionAppendRow = new QAction(QString("Insert after row %1").arg(index.row()), this);
 	actionAppendRow->setData(index);
-	connect(actionAppendRow, &QAction::triggered, this, &QasTleDB::slotAppendRow);
+	connect(actionAppendRow, &QAction::triggered, this, &Qastle::slotAppendRow);
 	menu->addAction(actionAppendRow);
 
 	menu->popup(ui.tableWidget->viewport()->mapToGlobal(pos));
 }
 
 // https://stackoverflow.com/questions/28646914/qaction-with-custom-parameter
-void QasTleDB::slotRemoveRow() {
+void Qastle::slotRemoveRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->removeRow(index.row(), index);
 }
 
-void QasTleDB::slotPrependRow() {
+void Qastle::slotPrependRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertRow(index.row(), index);
 }
 
-void QasTleDB::slotAppendRow() {
+void Qastle::slotAppendRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertRow(index.row() + 1, index);
 }

@@ -28,7 +28,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QasTleDB.cpp">
+    <ClCompile Include="qastle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TableModel.cpp">
@@ -36,7 +36,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="QasTleDB.h">
+    <QtMoc Include="qastle.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TableModel.h">
@@ -44,17 +44,17 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="QasTleDB.ui">
+    <QtUic Include="qastle.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="QasTleDB.qrc">
+    <QtRcc Include="qastle.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="x64\Debug\uic\ui_QasTleDB.h">
+    <ClInclude Include="x64\Debug\uic\ui_qastle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

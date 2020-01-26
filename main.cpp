@@ -1,10 +1,10 @@
-#include "QasTleDB.h"
+#include "qastle.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QasTleDB w;
+	Qastle w;
 	w.show();
 	return a.exec();
 }

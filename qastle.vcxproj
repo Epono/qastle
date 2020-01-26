@@ -81,21 +81,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="QasTleDB.cpp" />
+    <ClCompile Include="qastle.cpp" />
     <ClCompile Include="TableModel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="QasTleDB.h" />
+    <QtMoc Include="qastle.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="QasTleDB.ui" />
+    <QtUic Include="qastle.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="QasTleDB.qrc" />
+    <QtRcc Include="qastle.qrc" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TableModel.h" />
-    <ClInclude Include="x64\Debug\uic\ui_QasTleDB.h" />
+    <ClInclude Include="x64\Debug\uic\ui_qastle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

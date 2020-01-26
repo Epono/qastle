@@ -1,14 +1,14 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_QasTleDB.h"
+#include "ui_qastle.h"
 
-class QasTleDB : public QMainWindow
+class Qastle : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	QasTleDB(QWidget *parent = Q_NULLPTR);
+	Qastle(QWidget *parent = Q_NULLPTR);
 
 public slots:
 	void slotRemoveColumn();
