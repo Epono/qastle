@@ -2,48 +2,24 @@
 
 #include <QDebug>
 
+// Advanced example?
+//QMetaType::Type type = QMetaType::Type::Bool;
+//if (type != QMetaType::Type::UnknownType) {
+//	void* ptr = QMetaType::create(type);
+
+//	// ... Do things
+
+//	QMetaType::destroy(type, ptr);
+//	ptr = 0;
+//}
+
 TableModel::TableModel(QObject* parent) {
 
-	dataModel.push_back(QMetaType::Type::Bool);
-	dataModel.push_back(QMetaType::Type::Int);
-	dataModel.push_back(QMetaType::Type::Float);
-	dataModel.push_back(QMetaType::Type::Double);
-	dataModel.push_back(QMetaType::Type::QString);
-
-	headers.push_back("Dead?");
-	headers.push_back("Age");
-	headers.push_back("Height");
-	headers.push_back("Weight");
-	headers.push_back("Name");
-
-	for (int i = 0; i < dataModel.size(); ++i) {
-		QMetaType::Type type = QMetaType::Type(dataModel[i]);
-		if (type != QMetaType::Type::UnknownType) {
-			//void* ptr = QMetaType::create(type);
-
-			switch (type)
-			{
-			case QMetaType::QString:
-				newLineTemplate.push_back(QString());
-				break;
-			case QMetaType::Bool:
-				newLineTemplate.push_back(false);
-				break;
-			case QMetaType::Int:
-				newLineTemplate.push_back(int(0));
-				break;
-			case QMetaType::Float:
-				newLineTemplate.push_back(float(0));
-				break;
-			case QMetaType::Double:
-				newLineTemplate.push_back(double(0));
-				break;
-			}
-
-			//QMetaType::destroy(type, ptr);
-			//ptr = 0;
-		}
-	}
+	this->addTypeToTemplate(0, QMetaType::Type::Bool, "Dead?");
+	this->addTypeToTemplate(0, QMetaType::Type::Int, "Age");
+	this->addTypeToTemplate(0, QMetaType::Type::Float, "Height");
+	this->addTypeToTemplate(0, QMetaType::Type::Double, "Weight");
+	this->addTypeToTemplate(0, QMetaType::Type::QString, "Name");
 
 	QVector<QVariant> tempVector(newLineTemplate);
 	tableData.push_back(tempVector);
@@ -108,18 +84,11 @@ QVariant TableModel::data(const QModelIndex& index, int role) const {
 	return QVariant();
 }
 
-bool TableModel::insertColumns(int column, int count, const QModelIndex& parent) {
-	emit(this->beginInsertColumns(QModelIndex(), column, column + count - 1));
+bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent) {
+	emit(this->beginInsertColumns(QModelIndex(), column, column));
 
-	for (int i = 0; i < count; ++i) {
-		dataModel.insert(column, QMetaType::Type::QString);
-		newLineTemplate.insert(column, QString());
-		headers.insert(column, "New column");
-
-		for (int j = 0; j < tableData.size(); ++j) {
-			tableData[j].insert(column, QString());
-		}
-	}
+	addTypeToTemplate(column, type, headerName);
+	addTypeToExistingData(column, type);
 
 	emit(this->endInsertColumns());
 	return true;
@@ -159,4 +128,54 @@ bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 	emit(this->endRemoveRows());
 	return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// PRIVATE
+void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const QString headerName) {
+	dataModel.insert(column, type);
+
+	switch (type)
+	{
+	case QMetaType::QString:
+		newLineTemplate.insert(column, QString());
+		break;
+	case QMetaType::Bool:
+		newLineTemplate.insert(column, false);
+		break;
+	case QMetaType::Int:
+		newLineTemplate.insert(column, int(0));
+		break;
+	case QMetaType::Float:
+		newLineTemplate.insert(column, float(0));
+		break;
+	case QMetaType::Double:
+		newLineTemplate.insert(column, double(0));
+		break;
+	}
+
+	headers.insert(column, headerName);
+}
+
+void TableModel::addTypeToExistingData(int column, const QMetaType::Type type) {
+	for (int j = 0; j < tableData.size(); ++j) {
+		switch (type)
+		{
+		case QMetaType::QString:
+			tableData[j].insert(column, QString());
+			break;
+		case QMetaType::Bool:
+			tableData[j].insert(column, false);
+			break;
+		case QMetaType::Int:
+			tableData[j].insert(column, int(0));
+			break;
+		case QMetaType::Float:
+			tableData[j].insert(column, float(0));
+			break;
+		case QMetaType::Double:
+			tableData[j].insert(column, double(0));
+			break;
+		}
+	}
 }

@@ -85,10 +85,9 @@
   <ItemGroup>
     <QtMoc Include="include\qastle.h" />
     <QtMoc Include="include\table_model.h" />
-    <ClInclude Include="x64\Debug\uic\ui_column.h" />
-    <ClInclude Include="x64\Debug\uic\ui_qastle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\column_dialog.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\qastle.cpp" />
     <ClCompile Include="src\table_model.cpp" />
@@ -99,6 +98,11 @@
   <ItemGroup>
     <QtUic Include="ui\column.ui" />
     <QtUic Include="ui\qastle.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\column_dialog.h" />
+    <ClInclude Include="x64\Debug\uic\ui\ui_column.h" />
+    <ClInclude Include="x64\Debug\uic\ui\ui_qastle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

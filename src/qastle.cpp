@@ -1,5 +1,7 @@
 #include "qastle.h"
 #include "table_model.h"
+#include "column_dialog.h"
+
 #include <QMenu>
 #include <QDebug>
 #include <QInputDialog>
@@ -10,8 +12,9 @@ Qastle::Qastle(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	auto model = new TableModel();
+	ui.statusbar->showMessage(QString("looool"));
 
+	auto model = new TableModel();
 	ui.tableWidget->setModel(model);
 
 	ui.tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -21,33 +24,24 @@ Qastle::Qastle(QWidget* parent)
 
 	(void)connect(ui.tableWidget, &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuGrid);
 
-	ui.statusbar->showMessage(QString("looool"));
+	(void)connect(ui.actionRien, &QAction::triggered, this, &Qastle::slotOpenModalAddColumnEnd);
 
-	(void)connect(ui.actionRien, &QAction::triggered, this, &Qastle::rien);
-
+	// TABS
 	(void)connect(ui.tabWidget, &QTabWidget::currentChanged, this, &Qastle::tabSelected);
 	(void)connect(ui.tabWidget, &QTabWidget::tabBarDoubleClicked, this, &Qastle::tabDoubleClicked);
 
+	// HEADERS
 	(void)connect(ui.tableWidget->horizontalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuTopHeader);
+	(void)connect(ui.tableWidget->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::topHeaderDoubleClicked);
+
 	(void)connect(ui.tableWidget->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuSideHeader);
 
-	(void)connect(ui.tableWidget->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::topHeaderDoubleClicked);
+	// QUIT
+	(void)connect(ui.actionAdieu, &QAction::triggered, this, &QApplication::quit);
 }
 
-void Qastle::topHeaderDoubleClicked(int logicalIndex) {
-	bool ok;
-
-	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
-	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
-
-	QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers[logicalIndex], &ok);
-	if (ok && !text.isEmpty()) {
-		//on fait un second cast pour supprimer le const
-		TableModel* modelNonConst = const_cast<TableModel*>(model);
-		modelNonConst->headers[logicalIndex] = text;
-	}
-}
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// TABS
 void Qastle::tabDoubleClicked(const int selectedTabIndex) {
 	bool ok;
 	QString text = QInputDialog::getText(this, QString("Change name"), QString("Sheet name"), QLineEdit::Normal, ui.tabWidget->tabText(selectedTabIndex), &ok);
@@ -68,10 +62,8 @@ void Qastle::tabSelected(const int selectedTabIndex) {
 	}
 }
 
-void Qastle::rien() {
-	qDebug() << "lol";
-}
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// GRID
 void Qastle::showContextMenuGrid(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
@@ -94,6 +86,7 @@ void Qastle::showContextMenuGrid(const QPoint& pos) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // HORIZONTAL HEADER
+
 void Qastle::showContextMenuTopHeader(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
@@ -121,17 +114,53 @@ void Qastle::showContextMenuTopHeader(const QPoint& pos) {
 
 void Qastle::slotRemoveColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
+	// TODO: ConfirmDialog
 	ui.tableWidget->model()->removeColumn(index.column(), index);
 }
 
 void Qastle::slotPrependColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
-	ui.tableWidget->model()->insertColumn(index.column(), index);
+	openModalAddColumn(index.column());
 }
 
 void Qastle::slotAppendColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
-	ui.tableWidget->model()->insertColumn(index.column() + 1, index);
+	openModalAddColumn(index.column() + 1);
+}
+
+void Qastle::slotOpenModalAddColumnEnd() {
+	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
+	openModalAddColumn(model->headers.size());
+}
+
+// https://stackoverflow.com/questions/13116863/qt-show-modal-dialog-ui-on-menu-item-click
+void Qastle::openModalAddColumn(const int selectedColumnIndex = -1) {
+	auto dialog = new ColumnDialog(this, selectedColumnIndex);
+
+	(void)connect(dialog, &ColumnDialog::finishedWithData, this, &Qastle::slotColumnDialogAccepted);
+	dialog->show();
+}
+
+void Qastle::slotColumnDialogAccepted(const int selectedColumnIndex, const QVariant data, const QString headerName) {
+	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
+	TableModel* modelNonConst = const_cast<TableModel*>(model);
+
+	QMetaType::Type type = QMetaType::Type(data.toInt());
+	modelNonConst->insertColumnTyped(selectedColumnIndex, type, headerName);
+}
+
+void Qastle::topHeaderDoubleClicked(int logicalIndex) {
+	bool ok;
+
+	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
+	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
+
+	QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers[logicalIndex], &ok);
+	if (ok && !text.isEmpty()) {
+		//on fait un second cast pour supprimer le const
+		TableModel* modelNonConst = const_cast<TableModel*>(model);
+		modelNonConst->headers[logicalIndex] = text;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

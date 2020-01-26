@@ -10,8 +10,12 @@ class Qastle : public QMainWindow
 
 public:
 	Qastle(QWidget* parent = Q_NULLPTR);
+	void openModalAddColumn(const int selectedColumnIndex);
 
 public slots:
+	void slotOpenModalAddColumnEnd();
+	void slotColumnDialogAccepted(const int selectedColumnIndex, const QVariant data, const QString headerName);
+
 	void slotRemoveColumn();
 	void slotPrependColumn();
 	void slotAppendColumn();
@@ -26,7 +30,8 @@ public slots:
 	void showContextMenuGrid(const QPoint& pos);
 	void tabSelected(const int selectedTabIndex);
 	void tabDoubleClicked(const int selectedTabIndex);
-	void rien();
+
+	
 
 private:
 	Ui::MainWindow ui;

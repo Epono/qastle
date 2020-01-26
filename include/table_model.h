@@ -16,6 +16,9 @@ private:
 
 	QVector <QVector <QVariant> > tableData;
 
+	void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const QString headerName);
+	void TableModel::addTypeToExistingData(int column, const QMetaType::Type type);
+
 public:
 	// TODO: accessor
 	QVector <QString> headers;
@@ -27,7 +30,8 @@ public:
 	int TableModel::rowCount(const QModelIndex& parent = QModelIndex()) const;
 	int TableModel::columnCount(const QModelIndex& parent = QModelIndex()) const;
 
-	bool TableModel::insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
+	bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent = QModelIndex());
+	//bool TableModel::insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 	bool TableModel::removeColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 
 	bool TableModel::insertRows(int row, int count, const QModelIndex& parent = QModelIndex());

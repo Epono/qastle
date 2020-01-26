@@ -105,7 +105,7 @@
     <property name="title">
      <string>Aide</string>
     </property>
-    <addaction name="actionA"/>
+    <addaction name="actionAdieu"/>
     <addaction name="actionL_aide"/>
    </widget>
    <addaction name="menuFichier"/>
@@ -133,12 +133,9 @@
    <addaction name="actionRien"/>
    <addaction name="separator"/>
    <addaction name="actionEncore_rien"/>
-   <addaction name="actionA"/>
+   <addaction name="actionAdieu"/>
   </widget>
   <action name="actionRien">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Rien</string>
    </property>
@@ -148,9 +145,9 @@
     <string>Encore rien</string>
    </property>
   </action>
-  <action name="actionA">
+  <action name="actionAdieu">
    <property name="text">
-    <string>A</string>
+    <string>Adieu</string>
    </property>
   </action>
   <action name="actionL_aide">
@@ -164,6 +161,9 @@
    </property>
   </action>
   <action name="actionWow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Wow</string>
    </property>
