@@ -11,7 +11,7 @@ class TableModel : public QAbstractTableModel {
 private:
 	// TODO: en faire un type et avoir un vector de ce type ?
 	QVector <QMetaType::Type> dataModel;
-	
+
 	QVector <QVariant> newLineTemplate;
 
 	QVector <QVector <QVariant> > tableData;

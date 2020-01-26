@@ -8,7 +8,7 @@ class Qastle : public QMainWindow
 	Q_OBJECT
 
 public:
-	Qastle(QWidget *parent = Q_NULLPTR);
+	Qastle(QWidget* parent = Q_NULLPTR);
 
 public slots:
 	void slotRemoveColumn();

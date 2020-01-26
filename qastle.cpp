@@ -5,7 +5,7 @@
 #include <QInputDialog>
 #include <QDir>
 
-Qastle::Qastle(QWidget *parent)
+Qastle::Qastle(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -65,7 +65,7 @@ void Qastle::tabSelected(const int selectedTabIndex) {
 		QWidget* newTab = new QWidget(ui.tabWidget);
 		ui.tabWidget->addTab(newTab, tr("name"));
 
-		ui.tabWidget->tabBar()->setCurrentIndex(ui.tabWidget->tabBar()->count()-1);
+		ui.tabWidget->tabBar()->setCurrentIndex(ui.tabWidget->tabBar()->count() - 1);
 		ui.tabWidget->tabBar()->moveTab(selectedTabIndex, ui.tabWidget->tabBar()->count() - 1);
 	}
 }
@@ -142,13 +142,13 @@ void Qastle::showContextMenuVerticalHeader(const QPoint& pos) {
 	QModelIndex index = ui.tableWidget->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
-	
+
 	if (index.isValid()) {
 		QAction* actionRemoveRow = new QAction(QString("Remove row %1").arg(index.row()), this);
 		actionRemoveRow->setData(index);
 		connect(actionRemoveRow, &QAction::triggered, this, &Qastle::slotRemoveRow);
 		menu->addAction(actionRemoveRow);
-		
+
 		QAction* actionPrependRow = new QAction(QString("Insert before row %1").arg(index.row()), this);
 		actionPrependRow->setData(index);
 		connect(actionPrependRow, &QAction::triggered, this, &Qastle::slotPrependRow);
