@@ -39,6 +39,9 @@
     <QtMoc Include="QasTleDB.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="TableModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QasTleDB.ui">
@@ -51,9 +54,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TableModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="x64\Debug\uic\ui_QasTleDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>

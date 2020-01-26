@@ -6,17 +6,29 @@
 
 class TableModel : public QAbstractTableModel {
 
+	Q_OBJECT
+
 private:
+	// TODO: en faire un type et avoir un vector de ce type ?
+	QVector <QMetaType::Type> dataModel;
+	
+	QVector <QVariant> newLineTemplate;
+
 	QVector <QVector <QVariant> > tableData;
-	QVector <QVariant> dataModel;
 
 public:
+	// TODO: accessor
+	QVector <QString> headers;
+
 	TableModel(QObject* parent = nullptr);
 
 	Qt::ItemFlags TableModel::flags(const QModelIndex& index) const;
 
 	int TableModel::rowCount(const QModelIndex& parent = QModelIndex()) const;
 	int TableModel::columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+	bool TableModel::insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
+	bool TableModel::removeColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 
 	bool TableModel::insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
 	bool TableModel::removeRows(int row, int count, const QModelIndex& parent = QModelIndex());

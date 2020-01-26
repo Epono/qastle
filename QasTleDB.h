@@ -11,12 +11,17 @@ public:
 	QasTleDB(QWidget *parent = Q_NULLPTR);
 
 public slots:
-	void slotRemoveLine();
-	void slotPrependLine();
-	void slotAppendLine();
+	void slotRemoveColumn();
+	void slotPrependColumn();
+	void slotAppendColumn();
+
+	void slotRemoveRow();
+	void slotPrependRow();
+	void slotAppendRow();
 
 	void showContextMenuHorizontalHeader(const QPoint& pos);
 	void showContextMenuVerticalHeader(const QPoint& pos);
+	void horizontalHeaderDoubleClicked(int logicalIndex);
 	void showContextMenuGrid(const QPoint& pos);
 	void tabSelected(const int selectedTabIndex);
 	void tabDoubleClicked(const int selectedTabIndex);
