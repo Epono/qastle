@@ -10,9 +10,9 @@ MAKEFILE      = Makefile
 
 EQ            = =
 
-first: debug
-install: debug-install
-uninstall: debug-uninstall
+first: release
+install: release-install
+uninstall: release-uninstall
 QMAKE         = D:\Dev\Qt\static-5.14.0\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -37,31 +37,10 @@ RES_FILE      =
 SED           = $(QMAKE) -install sed
 MOVE          = move
 SUBTARGETS    =  \
-		debug \
-		release
+		release \
+		debug
 
 
-debug: $(MAKEFILE) FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug
-debug-make_first: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug 
-debug-all: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug all
-debug-clean: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug clean
-debug-distclean: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug distclean
-debug-install: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug install
-debug-uninstall: FORCE
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug uninstall
 release: $(MAKEFILE) FORCE
 	@set MAKEFLAGS=$(MAKEFLAGS)
 	$(MAKE) -f $(MAKEFILE).Release
@@ -83,6 +62,27 @@ release-install: FORCE
 release-uninstall: FORCE
 	@set MAKEFLAGS=$(MAKEFLAGS)
 	$(MAKE) -f $(MAKEFILE).Release uninstall
+debug: $(MAKEFILE) FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug
+debug-make_first: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug 
+debug-all: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug all
+debug-clean: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug clean
+debug-distclean: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug distclean
+debug-install: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug install
+debug-uninstall: FORCE
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug uninstall
 
 Makefile: qastle.pro ..\..\..\..\Dev\Qt\static-5.14.0\mkspecs\win32-msvc\qmake.conf ..\..\..\..\Dev\Qt\static-5.14.0\mkspecs\features\spec_pre.prf \
 		..\..\..\..\Dev\Qt\static-5.14.0\mkspecs\common\angle.conf \
@@ -656,36 +656,33 @@ qmake: FORCE
 
 qmake_all: FORCE
 
-make_first: debug-make_first release-make_first  FORCE
-all: debug-all release-all  FORCE
-clean: debug-clean release-clean  FORCE
-	-$(DEL_FILE) debug\qastle.vc.pdb
-	-$(DEL_FILE) x64\Debug\qastle.ilk
-	-$(DEL_FILE) x64\Debug\qastle.idb
-distclean: debug-distclean release-distclean  FORCE
+make_first: release-make_first debug-make_first  FORCE
+all: release-all debug-all  FORCE
+clean: release-clean debug-clean  FORCE
+distclean: release-distclean debug-distclean  FORCE
 	-$(DEL_FILE) Makefile
-	-$(DEL_FILE) D:\Media\Documents\Repos\qastle\qastle_plugin_import.cpp .qmake.stash x64\Debug\qastle.pdb
+	-$(DEL_FILE) D:\Media\Documents\Repos\qastle\qastle_plugin_import.cpp .qmake.stash
 
-debug-mocclean:
-	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug mocclean
 release-mocclean:
 	@set MAKEFLAGS=$(MAKEFLAGS)
 	$(MAKE) -f $(MAKEFILE).Release mocclean
-mocclean: debug-mocclean release-mocclean
-
-debug-mocables:
+debug-mocclean:
 	@set MAKEFLAGS=$(MAKEFLAGS)
-	$(MAKE) -f $(MAKEFILE).Debug mocables
+	$(MAKE) -f $(MAKEFILE).Debug mocclean
+mocclean: release-mocclean debug-mocclean
+
 release-mocables:
 	@set MAKEFLAGS=$(MAKEFLAGS)
 	$(MAKE) -f $(MAKEFILE).Release mocables
-mocables: debug-mocables release-mocables
+debug-mocables:
+	@set MAKEFLAGS=$(MAKEFLAGS)
+	$(MAKE) -f $(MAKEFILE).Debug mocables
+mocables: release-mocables debug-mocables
 
 check: first
 
 benchmark: first
 FORCE:
 
-$(MAKEFILE).Debug: Makefile
 $(MAKEFILE).Release: Makefile
+$(MAKEFILE).Debug: Makefile

@@ -4,14 +4,19 @@
 
 TEMPLATE = app
 TARGET = qastle
-DESTDIR = ./x64/Debug
-CONFIG += debug console
+DESTDIR = ./x64/Release
+CONFIG += static console
+#debug console
 LIBS += -L"."
+#LIBS += -lkernel32 -lkernel32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32
 DEPENDPATH += .
 MOC_DIR += .
-OBJECTS_DIR += debug
-UI_DIR += .ui/
-RCC_DIR += .Resources/
+OBJECTS_DIR += ./x64/Release/objects_dir/
+UI_DIR += ./x64/Release/ui_dir/
+RCC_DIR += ./x64/Release/rcc_dir/
+
+QT += \
+    core gui widgets
 
 HEADERS += ./x64/Debug/uic/ui/ui_column.h \
     ./x64/Debug/uic/ui/ui_qastle.h \
@@ -31,8 +36,5 @@ FORMS += ./ui/column.ui \
 
 RESOURCES += Resources/qastle.qrc
 
-QT += \
-    core gui widgets
 
-CONFIG += \
-    static
+
