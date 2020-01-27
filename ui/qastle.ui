@@ -93,20 +93,19 @@
      <property name="title">
       <string>Mais au moins ça remplit</string>
      </property>
-     <addaction name="actionWow"/>
+     <addaction name="actionCheck"/>
     </widget>
-    <addaction name="actionRien"/>
-    <addaction name="actionEncore_rien"/>
+    <addaction name="actionAddColumn"/>
+    <addaction name="actionSaveToJson"/>
     <addaction name="menuMais_au_moins_a_remplit"/>
     <addaction name="separator"/>
-    <addaction name="actionEt_c_est_d_j_a"/>
+    <addaction name="actionLoadFromJson"/>
    </widget>
    <widget class="QMenu" name="menuAide">
     <property name="title">
      <string>Aide</string>
     </property>
-    <addaction name="actionAdieu"/>
-    <addaction name="actionL_aide"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuAide"/>
@@ -129,51 +128,54 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionWow"/>
-   <addaction name="actionRien"/>
+   <addaction name="actionAddColumn"/>
+   <addaction name="actionLoadFromJson"/>
+   <addaction name="actionSaveToJson"/>
+   <addaction name="actionQuit"/>
    <addaction name="separator"/>
-   <addaction name="actionEncore_rien"/>
-   <addaction name="actionAdieu"/>
+   <addaction name="actionCheck"/>
   </widget>
-  <action name="actionRien">
+  <action name="actionAddColumn">
    <property name="text">
-    <string>Rien</string>
+    <string>Add column</string>
+   </property>
+   <property name="toolTip">
+    <string>Add column</string>
    </property>
   </action>
-  <action name="actionEncore_rien">
+  <action name="actionSaveToJson">
    <property name="text">
-    <string>Encore rien</string>
+    <string>To Json</string>
+   </property>
+   <property name="toolTip">
+    <string>To Json</string>
    </property>
   </action>
-  <action name="actionAdieu">
+  <action name="actionQuit">
    <property name="text">
-    <string>Adieu</string>
+    <string>Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit</string>
    </property>
   </action>
-  <action name="actionL_aide">
+  <action name="actionLoadFromJson">
    <property name="text">
-    <string>L'aide</string>
+    <string>From Json</string>
+   </property>
+   <property name="toolTip">
+    <string>From Json</string>
    </property>
   </action>
-  <action name="actionEt_c_est_d_j_a">
-   <property name="text">
-    <string>Et c'est déjà ça</string>
-   </property>
-  </action>
-  <action name="actionWow">
+  <action name="actionCheck">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Wow</string>
-   </property>
-  </action>
-  <action name="actionAjouter_un_tab">
-   <property name="text">
-    <string>Ajouter un tab</string>
+    <string>Check</string>
    </property>
    <property name="toolTip">
-    <string>Ajouter un tab</string>
+    <string>Check</string>
    </property>
   </action>
  </widget>

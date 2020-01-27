@@ -12,7 +12,12 @@ public:
 	Qastle(QWidget* parent = Q_NULLPTR);
 	void openModalAddColumn(const int selectedColumnIndex);
 
+	static QString getType(const QMetaType::Type& type, const QString& data = QString());
+
 public slots:
+	void slotLoadFromJson();
+	void slotSaveToJson();
+
 	void slotOpenModalAddColumnEnd();
 	void slotColumnDialogAccepted(const int selectedColumnIndex, const QVariant data, const QString headerName);
 
@@ -31,7 +36,6 @@ public slots:
 	void tabSelected(const int selectedTabIndex);
 	void tabDoubleClicked(const int selectedTabIndex);
 
-	
 
 private:
 	Ui::MainWindow ui;

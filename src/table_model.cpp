@@ -21,8 +21,8 @@ TableModel::TableModel(QObject* parent) {
 	this->addTypeToTemplate(0, QMetaType::Type::Double, "Weight");
 	this->addTypeToTemplate(0, QMetaType::Type::QString, "Name");
 
-	QVector<QVariant> tempVector(newLineTemplate);
-	tableData.push_back(tempVector);
+	QVector<QVariant> tempVector(mNewLineTemplate);
+	mTableData.push_back(tempVector);
 }
 
 Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
@@ -30,12 +30,12 @@ Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
 }
 
 int TableModel::rowCount(const QModelIndex& parent) const {
-	return tableData.size();
+	return mTableData.size();
 }
 
 int TableModel::columnCount(const QModelIndex& parent) const {
-	if (tableData.size() > 0) {
-		return tableData[0].size();
+	if (mTableData.size() > 0) {
+		return mTableData[0].size();
 	}
 	else {
 		return 0;
@@ -52,7 +52,7 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 	}
 	else {
 		if (role == Qt::ItemDataRole::DisplayRole) {
-			return QString("%1\n(%2)").arg(headers[section]).arg(QMetaType::typeName(dataModel[section]));
+			return QString("%1\n(%2)").arg(mHeaders[section]).arg(QMetaType::typeName(mDataModel[section]));
 		}
 		return QVariant();
 	}
@@ -67,7 +67,7 @@ bool TableModel::setData(const QModelIndex& index, const QVariant& value, int ro
 		if (!checkIndex(index)) {
 			return false;
 		}
-		tableData[index.row()][index.column()] = value;
+		mTableData[index.row()][index.column()] = value;
 		return true;
 	}
 
@@ -76,10 +76,10 @@ bool TableModel::setData(const QModelIndex& index, const QVariant& value, int ro
 
 QVariant TableModel::data(const QModelIndex& index, int role) const {
 	if (role == Qt::ItemDataRole::DisplayRole) {
-		return tableData[index.row()][index.column()];
+		return mTableData[index.row()][index.column()];
 	}
 	else if (role == Qt::ItemDataRole::EditRole) {
-		return tableData[index.row()][index.column()];
+		return mTableData[index.row()][index.column()];
 	}
 	return QVariant();
 }
@@ -97,12 +97,12 @@ bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const
 bool TableModel::removeColumns(int column, int count, const QModelIndex& parent) {
 	emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
 
-	dataModel.remove(column, count);
-	newLineTemplate.remove(column, count);
-	headers.remove(column, count);
+	mDataModel.remove(column, count);
+	mNewLineTemplate.remove(column, count);
+	mHeaders.remove(column, count);
 
-	for (int j = 0; j < tableData.size(); ++j) {
-		tableData[j].remove(column, count);
+	for (int j = 0; j < mTableData.size(); ++j) {
+		mTableData[j].remove(column, count);
 	}
 
 	emit(this->endRemoveColumns());
@@ -113,8 +113,8 @@ bool TableModel::insertRows(int row, int count, const QModelIndex& parent) {
 	emit(this->beginInsertRows(QModelIndex(), row, row + count - 1));
 
 	for (int i = 0; i < count; ++i) {
-		QVector<QVariant> newVector(newLineTemplate);
-		tableData.insert(row, newVector);
+		QVector<QVariant> newVector(mNewLineTemplate);
+		mTableData.insert(row, newVector);
 	}
 
 	emit(this->endInsertRows());
@@ -124,7 +124,7 @@ bool TableModel::insertRows(int row, int count, const QModelIndex& parent) {
 bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
 	emit(this->beginRemoveRows(QModelIndex(), row, row + count - 1));
 
-	tableData.remove(row, count);
+	mTableData.remove(row, count);
 
 	emit(this->endRemoveRows());
 	return true;
@@ -133,49 +133,82 @@ bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // PRIVATE
 void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const QString headerName) {
-	dataModel.insert(column, type);
+	mDataModel.insert(column, type);
 
 	switch (type)
 	{
 	case QMetaType::QString:
-		newLineTemplate.insert(column, QString());
+		mNewLineTemplate.insert(column, QString());
 		break;
 	case QMetaType::Bool:
-		newLineTemplate.insert(column, false);
+		mNewLineTemplate.insert(column, false);
 		break;
 	case QMetaType::Int:
-		newLineTemplate.insert(column, int(0));
+		mNewLineTemplate.insert(column, int(0));
 		break;
 	case QMetaType::Float:
-		newLineTemplate.insert(column, float(0));
+		mNewLineTemplate.insert(column, float(0));
 		break;
 	case QMetaType::Double:
-		newLineTemplate.insert(column, double(0));
+		mNewLineTemplate.insert(column, double(0));
 		break;
 	}
 
-	headers.insert(column, headerName);
+	mHeaders.insert(column, headerName);
 }
 
 void TableModel::addTypeToExistingData(int column, const QMetaType::Type type) {
-	for (int j = 0; j < tableData.size(); ++j) {
+	for (int j = 0; j < mTableData.size(); ++j) {
 		switch (type)
 		{
 		case QMetaType::QString:
-			tableData[j].insert(column, QString());
+			mTableData[j].insert(column, QString());
 			break;
 		case QMetaType::Bool:
-			tableData[j].insert(column, false);
+			mTableData[j].insert(column, false);
 			break;
 		case QMetaType::Int:
-			tableData[j].insert(column, int(0));
+			mTableData[j].insert(column, int(0));
 			break;
 		case QMetaType::Float:
-			tableData[j].insert(column, float(0));
+			mTableData[j].insert(column, float(0));
 			break;
 		case QMetaType::Double:
-			tableData[j].insert(column, double(0));
+			mTableData[j].insert(column, double(0));
 			break;
 		}
 	}
+}
+
+// ACCESSORS
+QVector <QMetaType::Type> TableModel::dataModel() const {
+	return mDataModel;
+}
+
+void TableModel::setDataModel(const QVector <QMetaType::Type>& dataModel) {
+	mDataModel = dataModel;
+}
+
+QVector <QVariant> TableModel::newLineTemplate() const {
+	return mNewLineTemplate;
+}
+
+void TableModel::setNewLineTemplate(const QVector <QVariant>& newLineTemplate) {
+	mNewLineTemplate = newLineTemplate;
+}
+
+QVector <QString> TableModel::headers() const {
+	return mHeaders;
+}
+
+void TableModel::setHeaders(const QVector <QString>& headers) {
+	mHeaders = headers;
+}
+
+QVector <QVector <QVariant> > TableModel::tableData() const {
+	return mTableData;
+}
+
+void TableModel::setTableData(const QVector <QVector <QVariant> >& tableData) {
+	mTableData = tableData;
 }

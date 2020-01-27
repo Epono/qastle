@@ -5,7 +5,13 @@
 #include <QMenu>
 #include <QDebug>
 #include <QInputDialog>
+#include <QFileDialog>
 #include <QDir>
+
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
 
 Qastle::Qastle(QWidget* parent)
 	: QMainWindow(parent)
@@ -24,8 +30,6 @@ Qastle::Qastle(QWidget* parent)
 
 	(void)connect(ui.tableWidget, &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuGrid);
 
-	(void)connect(ui.actionRien, &QAction::triggered, this, &Qastle::slotOpenModalAddColumnEnd);
-
 	// TABS
 	(void)connect(ui.tabWidget, &QTabWidget::currentChanged, this, &Qastle::tabSelected);
 	(void)connect(ui.tabWidget, &QTabWidget::tabBarDoubleClicked, this, &Qastle::tabDoubleClicked);
@@ -36,8 +40,98 @@ Qastle::Qastle(QWidget* parent)
 
 	(void)connect(ui.tableWidget->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuSideHeader);
 
-	// QUIT
-	(void)connect(ui.actionAdieu, &QAction::triggered, this, &QApplication::quit);
+	// ACTIONS
+	(void)connect(ui.actionLoadFromJson, &QAction::triggered, this, &Qastle::slotLoadFromJson);
+	(void)connect(ui.actionSaveToJson, &QAction::triggered, this, &Qastle::slotSaveToJson);
+
+	(void)connect(ui.actionAddColumn, &QAction::triggered, this, &Qastle::slotOpenModalAddColumnEnd);
+	(void)connect(ui.actionQuit, &QAction::triggered, this, &QApplication::quit);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// LOAD / SAVE
+void Qastle::slotLoadFromJson() {
+	QString fileName = QFileDialog::getOpenFileName(this,
+		QString("Open Image"), QString(), QString("JSON file (*.json);; Binary file (*.dat)"));
+}
+
+void Qastle::slotSaveToJson() {
+	// TODO: regarder si le fichier existe
+
+	// TODO: JSON or binary
+	QFile file(QStringLiteral("data.json"));
+
+	if (!file.open(QIODevice::WriteOnly)) {
+		qWarning("Couldn't open data file.");
+		return;
+	}
+
+	// Utiliser QModelIndex à la place ?
+	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
+
+	QJsonArray sheetsArray;
+
+	QJsonObject sheetArray;
+	sheetArray["name"] = ui.tabWidget->tabText(0);
+	sheetArray["props"] = QJsonObject();
+	sheetArray["separators"] = QJsonArray();
+
+	QJsonArray columnsArray;
+	for (int i = 0; i < model->dataModel().size(); ++i) {
+		QJsonObject columnObject;
+
+		// TODO: refacto pour éviter 12000 appels de fonction ? inline
+		// TODO: gérer le param "display" (pour les int/float? notamment)
+		QMetaType::Type type = model->dataModel()[i];
+		columnObject["typeStr"] = Qastle::getType(type);
+		columnObject["name"] = model->headers()[i];
+		columnsArray.append(columnObject);
+	}
+
+	QJsonArray linesArray;
+
+	for (const QVector<QVariant> &line : model->tableData()) {
+		QJsonObject lineObject;
+		for (int i = 0; i < model->dataModel().size(); ++i) {
+			// REFACTO
+			QMetaType::Type type = model->dataModel()[i];
+			switch (type)
+			{
+			case QMetaType::QString:
+				lineObject[model->headers()[i]] = line[i].toString();
+				break;
+			case QMetaType::Bool:
+				lineObject[model->headers()[i]] = line[i].toBool();
+				break;
+			case QMetaType::Int:
+				lineObject[model->headers()[i]] = line[i].toInt();
+				break;
+			case QMetaType::Float:
+				lineObject[model->headers()[i]] = line[i].toFloat();
+				break;
+			case QMetaType::Double:
+				lineObject[model->headers()[i]] = line[i].toDouble();
+				break;
+			}
+			//
+		}
+
+		linesArray.append(lineObject);
+	}
+
+	sheetArray["columns"] = columnsArray;
+	sheetArray["lines"] = linesArray;
+
+	sheetsArray.append(sheetArray);
+
+	QJsonObject doc;
+	doc["sheets"] = sheetsArray;
+	doc["customTypes"] = QJsonArray();
+	doc["compress"] = ui.actionCheck->isChecked();
+
+	QJsonDocument jsonDocument(doc);
+
+	file.write(jsonDocument.toJson());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +224,7 @@ void Qastle::slotAppendColumn() {
 
 void Qastle::slotOpenModalAddColumnEnd() {
 	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
-	openModalAddColumn(model->headers.size());
+	openModalAddColumn(model->headers().size());
 }
 
 // https://stackoverflow.com/questions/13116863/qt-show-modal-dialog-ui-on-menu-item-click
@@ -155,11 +249,11 @@ void Qastle::topHeaderDoubleClicked(int logicalIndex) {
 	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
 	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
 
-	QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers[logicalIndex], &ok);
+	QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers()[logicalIndex], &ok);
 	if (ok && !text.isEmpty()) {
 		//on fait un second cast pour supprimer le const
 		TableModel* modelNonConst = const_cast<TableModel*>(model);
-		modelNonConst->headers[logicalIndex] = text;
+		modelNonConst->headers()[logicalIndex] = text;
 	}
 }
 
@@ -204,4 +298,46 @@ void Qastle::slotPrependRow() {
 void Qastle::slotAppendRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertRow(index.row() + 1, index);
+}
+
+
+QString Qastle::getType(const QMetaType::Type& type, const QString& data) {
+	switch (type)
+	{
+	case QMetaType::QString:
+		//case 1: TString;
+		return QString("1");
+	case QMetaType::Bool:
+		//case 2: TBool;
+		return QString("2");
+	case QMetaType::Int:
+		//case 3: TInt;
+		return QString("3");
+	case QMetaType::Float:
+		//case 4: TFloat;
+		return QString("4");
+	case QMetaType::Double:
+		// y'a pas, va pour float
+		return QString("4");
+	default:
+		//default: throw "Unknown type " + str;
+		return QString("Unknown type : %1").arg(type);
+	}
+
+	//public static function getType(str : String) : Data.ColumnType{
+	//return switch (Std.parseInt(str)) {
+	//case 0: TId;
+	//case 5: TEnum(str.substr(str.indexOf(":") + 1).split(","));
+	//case 6: TRef(str.substr(str.indexOf(":") + 1));
+	//case 7: TImage;
+	//case 8: TList;
+	//case 9: TCustom(str.substr(str.indexOf(":") + 1));
+	//case 10: TFlags(str.substr(str.indexOf(":") + 1).split(","));
+	//case 11: TColor;
+	//case 12: TLayer(str.substr(str.indexOf(":") + 1));
+	//case 13: TFile;
+	//case 14: TTilePos;
+	//case 15: TTileLayer;
+	//case 16: TDynamic;
+	//case 17: TProperties;
 }
