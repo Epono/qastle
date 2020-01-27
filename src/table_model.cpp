@@ -175,6 +175,8 @@ void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const
 	case QMetaType::Double:
 		mNewLineTemplate.insert(column, double(0));
 		break;
+	default:
+		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg(type);
 	}
 
 	mHeaders.insert(column, headerName);

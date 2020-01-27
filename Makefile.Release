@@ -375,7 +375,75 @@ release\moc_qastle.cpp: include\qastle.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabwidget.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h \
 		x64\Release\ui_dir\ui_qastle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QVariant \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QAction \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qaction.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qactiongroup.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QApplication \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qeventloop.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qguiapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QGridLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qgridlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHeaderView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qheaderview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractscrollarea.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qframe.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qitemselectionmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qvalidator.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qregularexpression.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenu \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenu.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenuBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenubar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QPushButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qpushbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QStatusBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstatusbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTabWidget \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTableView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtableview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
 		x64\Release\ui_dir\ui_column.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QCheckBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcheckbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QComboBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialog \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialog.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialogButtonBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialogbuttonbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLabel \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlabel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLineEdit \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextcursor.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextformat.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qpen.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QVBoxLayout \
 		release\moc_predefs.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\bin\moc.exe
 	D:\Dev\Qt\static-5.14.0\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Media/Documents/Repos/qastle/release/moc_predefs.h -ID:/Dev/Qt/static-5.14.0/mkspecs/win32-msvc -ID:/Media/Documents/Repos/qastle -ID:/Dev/Qt/static-5.14.0/include -ID:/Dev/Qt/static-5.14.0/include/QtWidgets -ID:/Dev/Qt/static-5.14.0/include/QtGui -ID:/Dev/Qt/static-5.14.0/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" include\qastle.h -o release\moc_qastle.cpp
@@ -599,6 +667,50 @@ release\moc_column_dialog.cpp: include\column_dialog.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtouchdevice.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
 		x64\Release\ui_dir\ui_column.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QVariant \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QApplication \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qeventloop.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qguiapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QCheckBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcheckbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QComboBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qvalidator.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qregularexpression.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qframe.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialogButtonBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialogbuttonbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QGridLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qgridlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLabel \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlabel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLineEdit \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextcursor.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextformat.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qpen.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QVBoxLayout \
 		release\moc_predefs.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\bin\moc.exe
 	D:\Dev\Qt\static-5.14.0\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include D:/Media/Documents/Repos/qastle/release/moc_predefs.h -ID:/Dev/Qt/static-5.14.0/mkspecs/win32-msvc -ID:/Media/Documents/Repos/qastle -ID:/Dev/Qt/static-5.14.0/include -ID:/Dev/Qt/static-5.14.0/include/QtWidgets -ID:/Dev/Qt/static-5.14.0/include/QtGui -ID:/Dev/Qt/static-5.14.0/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" include\column_dialog.h -o release\moc_column_dialog.cpp
@@ -738,10 +850,52 @@ x64\Release\objects_dir\column_dialog.obj: src\column_dialog.cpp include\column_
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtouchdevice.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
 		x64\Release\ui_dir\ui_column.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QPushButton \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qpushbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QVariant \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QApplication \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qeventloop.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qguiapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QCheckBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcheckbox.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractbutton.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QComboBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qvalidator.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qregularexpression.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qframe.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialogButtonBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialogbuttonbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QGridLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qgridlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLabel \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlabel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLineEdit \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextcursor.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextformat.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qpen.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QVBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QPushButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qpushbutton.h
 
 x64\Release\objects_dir\main.obj: src\main.cpp include\qastle.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMainWindow \
@@ -852,14 +1006,75 @@ x64\Release\objects_dir\main.obj: src\main.cpp include\qastle.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabwidget.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h \
 		x64\Release\ui_dir\ui_qastle.h \
-		x64\Release\ui_dir\ui_column.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QVariant \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QAction \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qaction.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qactiongroup.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QApplication \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qapplication.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qcoreapplication.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qeventloop.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdesktopwidget.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qguiapplication.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QGridLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qgridlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHeaderView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qheaderview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractscrollarea.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qframe.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qitemselectionmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qvalidator.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qregularexpression.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenu \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenu.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenuBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenubar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QPushButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qpushbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QStatusBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstatusbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTabWidget \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTableView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtableview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
+		x64\Release\ui_dir\ui_column.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QCheckBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcheckbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QComboBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialog \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialog.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialogButtonBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialogbuttonbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLabel \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlabel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLineEdit \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextcursor.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextformat.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qpen.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QVBoxLayout
 
 x64\Release\objects_dir\qastle.obj: src\qastle.cpp include\qastle.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMainWindow \
@@ -970,29 +1185,83 @@ x64\Release\objects_dir\qastle.obj: src\qastle.cpp include\qastle.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabwidget.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qicon.h \
 		x64\Release\ui_dir\ui_qastle.h \
-		x64\Release\ui_dir\ui_column.h \
-		include\table_model.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QAbstractTableModel \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
-		include\import_export.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QString \
-		include\column_dialog.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialog \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialog.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenu \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenu.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QVariant \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QAction \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qaction.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qactiongroup.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QDebug \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QInputDialog \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qinputdialog.h \
-		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QApplication \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qeventloop.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qguiapplication.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qinputmethod.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QGridLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qgridlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHeaderView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qheaderview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractscrollarea.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qframe.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qitemselectionmodel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qvalidator.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qregularexpression.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstyle.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenu \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenu.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QMenuBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qmenubar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QPushButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qpushbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qabstractbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QStatusBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qstatusbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTabWidget \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QTableView \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtableview.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolBar \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbar.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QToolButton \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qtoolbutton.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QWidget \
+		x64\Release\ui_dir\ui_column.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QCheckBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcheckbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QComboBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialog \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialog.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QDialogButtonBox \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qdialogbuttonbox.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLabel \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlabel.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QLineEdit \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qlineedit.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextcursor.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextformat.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qpen.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtGui\qtextoption.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QVBoxLayout \
+		include\table_model.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QAbstractTableModel \
+		include\import_export.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QString \
+		include\column_dialog.h \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\QDebug \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QInputDialog \
+		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qinputdialog.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\QFileDialog \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtWidgets\qfiledialog.h \
 		..\..\..\..\Dev\Qt\static-5.14.0\include\QtCore\qdir.h \

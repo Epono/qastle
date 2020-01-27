@@ -1,6 +1,7 @@
 #include "../include/utils.h"
 
 #include <QStringList>
+#include <QDebug>
 
 // https://github.com/ncannasse/castle/blob/2468d659eb18198049b55693fa117a93b16252df/cdb/Parser.hx
 	//public static function getType(str : String) : Data.ColumnType{
@@ -45,17 +46,16 @@ QString Utils::getTypeFromStringType(const QMetaType::Type& type, const QString&
 }
 
 // TODO: add validations
-const QMetaType::Type& Utils::getTypeFromStringType(const QString& data) {
+QMetaType::Type Utils::getTypeFromStringType(const QString& data) {
 	QStringList list = data.split(":");
 	int typeNumber = list[0].toInt();
+
 	QStringList otherData;
 	if (list.size() > 1) {
 		otherData = list[1].split(",");
 	}
 
 	switch (typeNumber) {
-	case 0:
-		return QMetaType::Type::UnknownType;
 	case 1:
 		return QMetaType::Type::QString;
 	case 2:
@@ -64,5 +64,8 @@ const QMetaType::Type& Utils::getTypeFromStringType(const QString& data) {
 		return QMetaType::Type::Int;
 	case 4:
 		return QMetaType::Type::Float;
+	default:
+		qDebug() << QString("[getTypeFromStringType] Type not found: %1").arg(typeNumber);
+		return QMetaType::Type::UnknownType;
 	}
 }
