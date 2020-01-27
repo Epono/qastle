@@ -3,27 +3,28 @@
 
 ColumnDialog::ColumnDialog(QWidget* parent, const int selectedColumnIndex) : QDialog(parent) {
 
-    setupUi(this);
+	setupUi(this);
 
-    this->selectedColumnIndex = selectedColumnIndex;
-    this->setModal(true);
+	this->selectedColumnIndex = selectedColumnIndex;
+	setModal(true);
+	lineEdit->setFocus();
 
-    this->comboBox->addItem("Float", QVariant((float)QMetaType::Type::Float));
-    this->comboBox->addItem("Bool", QVariant((float)QMetaType::Type::Bool));
-    this->comboBox->addItem("Int", QVariant((float)QMetaType::Type::Int));
-    this->comboBox->addItem("String", QVariant((float)QMetaType::Type::QString));
-    this->comboBox->addItem("Double", QVariant((float)QMetaType::Type::Double));
+	comboBox->addItem("Float", QVariant((float)QMetaType::Type::Float));
+	comboBox->addItem("Bool", QVariant((float)QMetaType::Type::Bool));
+	comboBox->addItem("Int", QVariant((float)QMetaType::Type::Int));
+	comboBox->addItem("String", QVariant((float)QMetaType::Type::QString));
+	comboBox->addItem("Double", QVariant((float)QMetaType::Type::Double));
 
-    QPushButton* okButton = this->buttonBox->button(QDialogButtonBox::StandardButton::Ok);
-    okButton->disconnect();
+	QPushButton* okButton = buttonBox->button(QDialogButtonBox::StandardButton::Ok);
+	okButton->disconnect();
 
-    connect(okButton, &QPushButton::clicked, this, &ColumnDialog::acceptedWithData);
+	connect(okButton, &QPushButton::clicked, this, &ColumnDialog::acceptedWithData);
 }
 
 void ColumnDialog::acceptedWithData() {
-    this->setResult(QDialog::Accepted);
-    emit accepted();
-    emit finished(this->result());
-    emit finishedWithData(selectedColumnIndex, this->comboBox->currentData(), this->lineEdit->text());
-    hide();
+	setResult(QDialog::Accepted);
+	emit accepted();
+	emit finished(this->result());
+	emit finishedWithData(selectedColumnIndex, comboBox->currentData(), lineEdit->text());
+	hide();
 }

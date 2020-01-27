@@ -13,13 +13,22 @@
 //	ptr = 0;
 //}
 
-TableModel::TableModel(QObject* parent) {
+void TableModel::addDummyData() {
+	insertColumnTyped(0, QMetaType::Type::Bool, "Dead?");
+	insertColumnTyped(0, QMetaType::Type::Int, "Age");
+	insertColumnTyped(0, QMetaType::Type::Float, "Height");
+	insertColumnTyped(0, QMetaType::Type::Double, "Weight");
+	insertColumnTyped(0, QMetaType::Type::QString, "Name");
 
-	this->addTypeToTemplate(0, QMetaType::Type::Bool, "Dead?");
-	this->addTypeToTemplate(0, QMetaType::Type::Int, "Age");
-	this->addTypeToTemplate(0, QMetaType::Type::Float, "Height");
-	this->addTypeToTemplate(0, QMetaType::Type::Double, "Weight");
-	this->addTypeToTemplate(0, QMetaType::Type::QString, "Name");
+	for (int i = 0; i < 10; ++i) {
+		QVector<QVariant> tempVector(mNewLineTemplate);
+		mTableData.push_back(tempVector);
+	}
+}
+
+TableModel::TableModel(QObject* parent) {
+	// TODO: make a real "id" column
+	insertColumnTyped(0, QMetaType::Type::Int, "ID");
 
 	QVector<QVariant> tempVector(mNewLineTemplate);
 	mTableData.push_back(tempVector);
@@ -95,6 +104,10 @@ bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const
 }
 
 bool TableModel::removeColumns(int column, int count, const QModelIndex& parent) {
+	// Hack to allow removeColumns(0, 100000);
+	if (column + count > mDataModel.size()) {
+		count = mDataModel.size() - column;
+	}
 	emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
 
 	mDataModel.remove(column, count);
@@ -106,6 +119,16 @@ bool TableModel::removeColumns(int column, int count, const QModelIndex& parent)
 	}
 
 	emit(this->endRemoveColumns());
+	return true;
+}
+
+bool TableModel::insertRowWithData(int row, QVector <QVariant>& data, const QModelIndex& parent) {
+	emit(this->beginInsertRows(QModelIndex(), row, row));
+
+	QVector<QVariant> newVector(data);
+	mTableData.insert(row, newVector);
+
+	emit(this->endInsertRows());
 	return true;
 }
 
@@ -185,30 +208,38 @@ QVector <QMetaType::Type> TableModel::dataModel() const {
 	return mDataModel;
 }
 
-void TableModel::setDataModel(const QVector <QMetaType::Type>& dataModel) {
-	mDataModel = dataModel;
-}
+//void TableModel::setDataModel(const QVector <QMetaType::Type>& dataModel) {
+//	mDataModel = dataModel;
+//}
 
 QVector <QVariant> TableModel::newLineTemplate() const {
 	return mNewLineTemplate;
 }
 
-void TableModel::setNewLineTemplate(const QVector <QVariant>& newLineTemplate) {
-	mNewLineTemplate = newLineTemplate;
-}
+//void TableModel::setNewLineTemplate(const QVector <QVariant>& newLineTemplate) {
+//	mNewLineTemplate = newLineTemplate;
+//}
 
 QVector <QString> TableModel::headers() const {
 	return mHeaders;
 }
 
-void TableModel::setHeaders(const QVector <QString>& headers) {
-	mHeaders = headers;
-}
+//void TableModel::setHeaders(const QVector <QString>& headers) {
+//	mHeaders = headers;
+//}
 
 QVector <QVector <QVariant> > TableModel::tableData() const {
 	return mTableData;
 }
 
-void TableModel::setTableData(const QVector <QVector <QVariant> >& tableData) {
-	mTableData = tableData;
+//void TableModel::setTableData(const QVector <QVector <QVariant> >& tableData) {
+//	mTableData = tableData;
+//}
+
+QString TableModel::sheetName() const {
+	return mSheetName;
+}
+
+void TableModel::setSheetName(const QString& sheetName) {
+	mSheetName = sheetName;
 }

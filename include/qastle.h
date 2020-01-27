@@ -12,8 +12,6 @@ public:
 	Qastle(QWidget* parent = Q_NULLPTR);
 	void openModalAddColumn(const int selectedColumnIndex);
 
-	static QString getType(const QMetaType::Type& type, const QString& data = QString());
-
 public slots:
 	void slotLoadFromJson();
 	void slotSaveToJson();

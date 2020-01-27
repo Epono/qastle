@@ -88,9 +88,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\column_dialog.cpp" />
+    <ClCompile Include="src\import_export.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\qastle.cpp" />
     <ClCompile Include="src\table_model.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Resources\qastle.qrc" />
@@ -101,6 +103,8 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\column_dialog.h" />
+    <ClInclude Include="include\import_export.h" />
+    <ClInclude Include="include\utils.h" />
     <ClInclude Include="x64\Debug\uic\ui\ui_column.h" />
     <ClInclude Include="x64\Debug\uic\ui\ui_qastle.h" />
   </ItemGroup>
