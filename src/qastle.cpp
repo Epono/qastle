@@ -1,8 +1,8 @@
-#include "qastle.h"
-#include "table_model.h"
-#include "import_export.h"
+#include "../include/qastle.h"
+#include "../include/table_model.h"
+#include "../include/import_export.h"
 
-#include "column_dialog.h"
+#include "../include/column_dialog.h"
 
 #include <QMenu>
 #include <QDebug>

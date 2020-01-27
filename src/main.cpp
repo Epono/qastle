@@ -1,5 +1,5 @@
-#include "qastle.h"
-#include <QtWidgets/QApplication>
+#include "../include/qastle.h"
+#include <QApplication>
 
 int main(int argc, char* argv[])
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
+#include <QMainWindow>
 #include "ui_qastle.h"
 #include "ui_column.h"
 

@@ -1,4 +1,4 @@
-#include "column_dialog.h"
+#include "../include/column_dialog.h"
 #include <QPushButton>
 
 ColumnDialog::ColumnDialog(QWidget* parent, const int selectedColumnIndex) : QDialog(parent) {

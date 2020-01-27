@@ -1,5 +1,5 @@
-#include "import_export.h"
-#include "utils.h"
+#include "../include/import_export.h"
+#include "../include/utils.h"
 
 #include <QFile>
 #include <QDebug>
