@@ -8,33 +8,13 @@ DESTDIR = ./x64/Release
 CONFIG += static console
 #debug console
 LIBS += -L"."
+# for command line build
 #LIBS += -lkernel32 -lkernel32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32
 DEPENDPATH += .
 MOC_DIR += .
 OBJECTS_DIR += ./x64/Release/objects_dir/
 UI_DIR += ./x64/Release/ui_dir/
 RCC_DIR += ./x64/Release/rcc_dir/
+QT += core gui widgets
 
-QT += \
-    core gui widgets
-
-HEADERS += ./x64/Debug/uic/ui/ui_column.h \
-    ./x64/Debug/uic/ui/ui_qastle.h \
-    ./include/qastle.h \
-    ./include/table_model.h \
-    ./include/column_dialog.h \
-    ./include/import_export.h \
-    ./include/utils.h
-SOURCES += ./src/column_dialog.cpp \
-    ./src/main.cpp \
-    ./src/qastle.cpp \
-    ./src/table_model.cpp \
-    ./src/import_export.cpp \
-    ./src/utils.cpp
-FORMS += ./ui/column.ui \
-    ./ui/qastle.ui
-
-RESOURCES += Resources/qastle.qrc
-
-
-
+include(qastle.pri)

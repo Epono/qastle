@@ -356,3 +356,8 @@ MigrationBackup/
 
 ############################################# CUSTOM
 data.json
+Makefile
+Makefile.Debug
+Makefile.Release
+.qmake.stash
+qastle_plugin_import.cpp
