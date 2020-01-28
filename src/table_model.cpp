@@ -32,6 +32,8 @@ TableModel::TableModel(QObject* parent) {
 
 	QVector<QVariant> tempVector(mNewLineTemplate);
 	mTableData.push_back(tempVector);
+
+	mSheetName = QString("New sheet");
 }
 
 Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
@@ -175,8 +177,13 @@ void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const
 	case QMetaType::Double:
 		mNewLineTemplate.insert(column, double(0));
 		break;
-	default:
+	case QMetaType::Type::QCursor:
 		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg(type);
+		mNewLineTemplate.insert(column, QString());
+	default:
+		// TODO
+		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg(type);
+		break;
 	}
 
 	mHeaders.insert(column, headerName);
@@ -229,6 +236,11 @@ QVector <QString> TableModel::headers() const {
 //void TableModel::setHeaders(const QVector <QString>& headers) {
 //	mHeaders = headers;
 //}
+
+void TableModel::setHeaderAtIndex(const int index, const QString newHeaderName) {
+	// TODO: check in range
+	mHeaders[index] = newHeaderName;
+}
 
 QVector <QVector <QVariant> > TableModel::tableData() const {
 	return mTableData;

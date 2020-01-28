@@ -1,16 +1,29 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QTableView>
+#include <QHeaderView>
 #include "ui_qastle.h"
 #include "ui_column.h"
+
+#include "../include/table_model.h"
 
 class Qastle : public QMainWindow
 {
 	Q_OBJECT
+private:
+	Ui::MainWindow ui;
+	QTableView* mCurrentTableView;
+	QVector<QTableView*> mTableViews;
+
+	void Qastle::initNewTableView(QTableView* tableView, TableModel* model = new TableModel(), const int tabIndex = -1);
 
 public:
 	Qastle(QWidget* parent = Q_NULLPTR);
 	void openModalAddColumn(const int selectedColumnIndex);
+
+	//QTableView* currentTableView();
+	//void setCurrentTableView(QTableView* currentTableView);
 
 public slots:
 	void slotLoadFromJson();
@@ -32,10 +45,8 @@ public slots:
 	void topHeaderDoubleClicked(int logicalIndex);
 	void sideHeaderDoubleClicked(int logicalIndex);
 	void showContextMenuGrid(const QPoint& pos);
+
+	void addTab(const int selectedTabIndex = 0, TableModel* tableModel = new TableModel());
 	void tabSelected(const int selectedTabIndex);
 	void tabDoubleClicked(const int selectedTabIndex);
-
-
-private:
-	Ui::MainWindow ui;
 };

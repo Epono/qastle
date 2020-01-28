@@ -1,12 +1,13 @@
 #pragma once
 
-#include <QString>
 #include "table_model.h"
+
+#include <QString>
 
 class ImportExport
 {
 public:
-	static TableModel* ImportExport::loadFromJson(const QString& filename);
-	static bool ImportExport::saveToJson(const QString& filename, const TableModel* const data, const QVector<QString>& tabNames, const bool doCompress);
+	static QVector<TableModel*> ImportExport::loadFromJson(const QString& filename);
+	static bool ImportExport::saveToJson(const QString& filename, const QVector<TableModel*> tableModels, const bool doCompress);
 };
 

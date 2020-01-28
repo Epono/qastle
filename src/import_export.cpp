@@ -1,4 +1,5 @@
 #include "../include/import_export.h"
+#include "../include/table_model.h"
 #include "../include/utils.h"
 
 #include <QFile>
@@ -12,14 +13,14 @@
 // TODO: add bool for .dat vs .json
 
 // TODO: return array of tableModel*? also tabNames
-TableModel* ImportExport::loadFromJson(const QString& filename) {
+QVector<TableModel*> ImportExport::loadFromJson(const QString& filename) {
 
 	QFile file(filename);
 
 	// TODO: exception instead of return?
 	// QIODevice::Text only if *.json?
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return nullptr;
+		return QVector<TableModel*>();
 
 	QByteArray fileData = file.readAll();
 
@@ -37,30 +38,30 @@ TableModel* ImportExport::loadFromJson(const QString& filename) {
 	bool isCompressed = rootObject["compress"].toBool();
 
 	// TODO: nettoyer si erreur ?
-	TableModel* model = new TableModel();
-
 	QJsonArray sheetsArray = rootObject["sheets"].toArray();
-	//for (int i = 0; i < sheetsArray.size(); ++i) {
-	for (int i = 0; i < 1; ++i) { // TODO
+	QVector<TableModel*> tableModels;
+
+	for (int i = 0; i < sheetsArray.size(); ++i) {
 		QJsonObject sheetObject = sheetsArray[i].toObject();
+		TableModel* tableModel = new TableModel();
 
 		QJsonArray separatorsArray = sheetObject["separators"].toArray();
 		QJsonObject propsObject = sheetObject["props"].toObject();
 
 		QString sheetName = sheetObject["name"].toString();
-		model->setSheetName(sheetName);
+		tableModel->setSheetName(sheetName);
 
 		// COLUMNS
 		QJsonArray columnsArray = sheetObject["columns"].toArray();
 
 		// TODO: Load in a new sheet to avoid conflicts
-		model->removeColumns(0, 100);
+		tableModel->removeColumns(0, 100);
 		for (int j = 0; j < columnsArray.size(); ++j) {
 			QJsonObject columnObject = columnsArray[j].toObject();
 			QString headerName(columnObject["name"].toString());
 			QMetaType::Type type(Utils::getTypeFromStringType(columnObject["typeStr"].toString()));
 
-			model->insertColumnTyped(j, type, headerName);
+			tableModel->insertColumnTyped(j, type, headerName);
 		}
 
 		// ROWS
@@ -69,9 +70,9 @@ TableModel* ImportExport::loadFromJson(const QString& filename) {
 			QJsonObject lineObject = linesArray[j].toObject();
 			QVector<QVariant> data;
 
-			for (int k = 0; k < model->dataModel().size(); ++k) {
-				QMetaType::Type type = model->dataModel()[k];
-				QString headerName = model->headers()[k];
+			for (int k = 0; k < tableModel->dataModel().size(); ++k) {
+				QMetaType::Type type = tableModel->dataModel()[k];
+				QString headerName = tableModel->headers()[k];
 
 				switch (type)
 				{
@@ -90,20 +91,27 @@ TableModel* ImportExport::loadFromJson(const QString& filename) {
 				case QMetaType::Double:
 					data.append(lineObject[headerName].toDouble());
 					break;
+				case QMetaType::Type::QCursor:
+					data.append(QString("Not supported"));
+				default:
+					// TODO
+					break;
 				}
 			}
 
-			model->insertRowWithData(j, data);
+			tableModel->insertRowWithData(j, data);
 		}
+
+		tableModels.append(tableModel);
 	}
 
-	return model;
+	return tableModels;
 }
 
-bool ImportExport::saveToJson(const QString& filename, const TableModel* const model, const QVector<QString>& tabNames, const bool doCompress) {
+bool ImportExport::saveToJson(const QString& filename, const QVector<TableModel*> tableModels, const bool doCompress) {
 
 	// TODO: JSON or binary
-	QFile file(QStringLiteral("data.json"));
+	QFile file(filename);
 
 	if (!file.open(QIODevice::WriteOnly)) {
 		qWarning("Couldn't open data file.");
@@ -112,59 +120,62 @@ bool ImportExport::saveToJson(const QString& filename, const TableModel* const m
 
 	// TODO: support multiple sheets
 	QJsonArray sheetsArray;
-	QJsonObject sheetObject;
 
-	sheetObject["name"] = tabNames[0];
-	sheetObject["props"] = QJsonObject();
-	sheetObject["separators"] = QJsonArray();
+	for (TableModel* model : tableModels) {
+		QJsonObject sheetObject;
 
-	QJsonArray columnsArray;
-	for (int i = 0; i < model->dataModel().size(); ++i) {
-		QJsonObject columnObject;
+		sheetObject["name"] = model->sheetName();
+		sheetObject["props"] = QJsonObject();
+		sheetObject["separators"] = QJsonArray();
 
-		// TODO: refacto pour éviter 12000 appels de fonction ? inline
-		// TODO: gérer le param "display" (pour les int/float? notamment) (juste pour intéropérabilité avec cdb, osef un peu sinon)
-		QMetaType::Type type = model->dataModel()[i];
-		columnObject["typeStr"] = Utils::getTypeFromStringType(type);
-		columnObject["name"] = model->headers()[i];
-		columnsArray.append(columnObject);
-	}
-
-	QJsonArray linesArray;
-
-	for (const QVector<QVariant>& line : model->tableData()) {
-		QJsonObject lineObject;
+		QJsonArray columnsArray;
 		for (int i = 0; i < model->dataModel().size(); ++i) {
-			// REFACTO
+			QJsonObject columnObject;
+
+			// TODO: refacto pour éviter 12000 appels de fonction ? inline
+			// TODO: gérer le param "display" (pour les int/float? notamment) (juste pour intéropérabilité avec cdb, osef un peu sinon)
 			QMetaType::Type type = model->dataModel()[i];
-			switch (type)
-			{
-			case QMetaType::QString:
-				lineObject[model->headers()[i]] = line[i].toString();
-				break;
-			case QMetaType::Bool:
-				lineObject[model->headers()[i]] = line[i].toBool();
-				break;
-			case QMetaType::Int:
-				lineObject[model->headers()[i]] = line[i].toInt();
-				break;
-			case QMetaType::Float:
-				lineObject[model->headers()[i]] = line[i].toFloat();
-				break;
-			case QMetaType::Double:
-				lineObject[model->headers()[i]] = line[i].toDouble();
-				break;
-			}
-			//
+			columnObject["typeStr"] = Utils::getTypeFromStringType(type);
+			columnObject["name"] = model->headers()[i];
+			columnsArray.append(columnObject);
 		}
 
-		linesArray.append(lineObject);
+		QJsonArray linesArray;
+
+		for (const QVector<QVariant>& line : model->tableData()) {
+			QJsonObject lineObject;
+			for (int i = 0; i < model->dataModel().size(); ++i) {
+				// REFACTO
+				QMetaType::Type type = model->dataModel()[i];
+				switch (type)
+				{
+				case QMetaType::QString:
+					lineObject[model->headers()[i]] = line[i].toString();
+					break;
+				case QMetaType::Bool:
+					lineObject[model->headers()[i]] = line[i].toBool();
+					break;
+				case QMetaType::Int:
+					lineObject[model->headers()[i]] = line[i].toInt();
+					break;
+				case QMetaType::Float:
+					lineObject[model->headers()[i]] = line[i].toFloat();
+					break;
+				case QMetaType::Double:
+					lineObject[model->headers()[i]] = line[i].toDouble();
+					break;
+				}
+				//
+			}
+
+			linesArray.append(lineObject);
+		}
+
+		sheetObject["columns"] = columnsArray;
+		sheetObject["lines"] = linesArray;
+
+		sheetsArray.append(sheetObject);
 	}
-
-	sheetObject["columns"] = columnsArray;
-	sheetObject["lines"] = linesArray;
-
-	sheetsArray.append(sheetObject);
 
 	QJsonObject rootObject;
 	rootObject["sheets"] = sheetsArray;

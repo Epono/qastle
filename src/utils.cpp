@@ -66,6 +66,7 @@ QMetaType::Type Utils::getTypeFromStringType(const QString& data) {
 		return QMetaType::Type::Float;
 	default:
 		qDebug() << QString("[getTypeFromStringType] Type not found: %1").arg(typeNumber);
-		return QMetaType::Type::UnknownType;
+		//return QMetaType::Type::UnknownType;
+		return QMetaType::Type::QCursor;
 	}
 }

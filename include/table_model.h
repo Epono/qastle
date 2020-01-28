@@ -43,6 +43,8 @@ public:
 	bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
+	void setHeaderAtIndex(const int index, const QString newHeaderName);
+
 	// ACCESSORS
 	QVector <QMetaType::Type> dataModel() const;
 	//void setDataModel(const QVector <QMetaType::Type>& dataModel);
