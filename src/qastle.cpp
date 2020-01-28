@@ -35,6 +35,7 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 	(void)connect(ui.tableWidget->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::topHeaderDoubleClicked);
 
 	(void)connect(ui.tableWidget->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuSideHeader);
+	(void)connect(ui.tableWidget->verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::sideHeaderDoubleClicked);
 
 	// ACTIONS
 	(void)connect(ui.actionLoadFromJson, &QAction::triggered, this, &Qastle::slotLoadFromJson);
@@ -181,12 +182,17 @@ void Qastle::topHeaderDoubleClicked(int logicalIndex) {
 
 	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
 	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
-
-	QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers()[logicalIndex], &ok);
-	if (ok && !text.isEmpty()) {
-		//on fait un second cast pour supprimer le const
-		TableModel* modelNonConst = const_cast<TableModel*>(model);
-		modelNonConst->headers()[logicalIndex] = text;
+	if (logicalIndex == -1) {
+		// Outside, new column
+		openModalAddColumn(model->headers().size());
+	}
+	else {
+		QString text = QInputDialog::getText(this, QString("Change column name"), QString("Column name"), QLineEdit::Normal, model->headers()[logicalIndex], &ok);
+		if (ok && !text.isEmpty()) {
+			//on fait un second cast pour supprimer le const
+			TableModel* modelNonConst = const_cast<TableModel*>(model);
+			modelNonConst->headers()[logicalIndex] = text;
+		}
 	}
 }
 
@@ -231,4 +237,17 @@ void Qastle::slotPrependRow() {
 void Qastle::slotAppendRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	ui.tableWidget->model()->insertRow(index.row() + 1, index);
+}
+
+void Qastle::sideHeaderDoubleClicked(int logicalIndex) {
+	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
+	const TableModel* model = qobject_cast<const TableModel*>(ui.tableWidget->model());
+	if (logicalIndex == -1) {
+		// Outside, new row
+		ui.tableWidget->model()->insertRow(model->headers().size());
+		//openModalAddColumn(model->headers().size());
+	}
+	else {
+		// TODO: handle double click on row number
+	}
 }

@@ -30,6 +30,7 @@ public slots:
 	void showContextMenuTopHeader(const QPoint& pos);
 	void showContextMenuSideHeader(const QPoint& pos);
 	void topHeaderDoubleClicked(int logicalIndex);
+	void sideHeaderDoubleClicked(int logicalIndex);
 	void showContextMenuGrid(const QPoint& pos);
 	void tabSelected(const int selectedTabIndex);
 	void tabDoubleClicked(const int selectedTabIndex);
