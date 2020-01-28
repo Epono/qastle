@@ -26,13 +26,14 @@ void TableModel::addDummyData() {
 	}
 }
 
-TableModel::TableModel(QObject* parent) {
-	// TODO: make a real "id" column
+void TableModel::addFirstColumnAndRow() {
 	insertColumnTyped(0, QMetaType::Type::Int, "ID");
 
 	QVector<QVariant> tempVector(mNewLineTemplate);
 	mTableData.push_back(tempVector);
+}
 
+TableModel::TableModel(QObject* parent) {
 	mSheetName = QString("New sheet");
 }
 
@@ -95,6 +96,18 @@ QVariant TableModel::data(const QModelIndex& index, int role) const {
 	return QVariant();
 }
 
+bool TableModel::insertColumnsTyped(const QVector<QMetaType::Type> types, const QVector<QString> headerNames, const QModelIndex& parent) {
+	emit(this->beginInsertColumns(QModelIndex(), 0, headerNames.size()));
+
+	for (int i = 0; i < headerNames.size(); ++i) {
+		addTypeToTemplate(i, types[i], headerNames[i]);
+		addTypeToExistingData(i, types[i]);
+	}
+
+	emit(this->endInsertColumns());
+	return true;
+}
+
 bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent) {
 	emit(this->beginInsertColumns(QModelIndex(), column, column));
 
@@ -109,6 +122,9 @@ bool TableModel::removeColumns(int column, int count, const QModelIndex& parent)
 	// Hack to allow removeColumns(0, 100000);
 	if (column + count > mDataModel.size()) {
 		count = mDataModel.size() - column;
+	}
+	if (count == 0) {
+		return true;
 	}
 	emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
 

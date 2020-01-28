@@ -21,6 +21,8 @@ private:
 	void addTypeToExistingData(int column, const QMetaType::Type type);
 
 public:
+	void addFirstColumnAndRow();
+
 	// OVERRIDE
 	TableModel(QObject* parent = nullptr);
 
@@ -31,6 +33,7 @@ public:
 
 	// Except this one
 	bool insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent = QModelIndex());
+	bool insertColumnsTyped(const QVector<QMetaType::Type> types, const QVector<QString> headerNames, const QModelIndex& parent = QModelIndex());
 	//bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 	bool removeColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 

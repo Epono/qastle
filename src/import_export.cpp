@@ -56,13 +56,24 @@ QVector<TableModel*> ImportExport::loadFromJson(const QString& filename) {
 
 		// TODO: Load in a new sheet to avoid conflicts
 		tableModel->removeColumns(0, 100);
+
+		QVector<QMetaType::Type> types;
+		QVector<QString> headerNames;
+
 		for (int j = 0; j < columnsArray.size(); ++j) {
 			QJsonObject columnObject = columnsArray[j].toObject();
 			QString headerName(columnObject["name"].toString());
 			QMetaType::Type type(Utils::getTypeFromStringType(columnObject["typeStr"].toString()));
 
-			tableModel->insertColumnTyped(j, type, headerName);
+			// TODO: j instead of 0?
+			//tableModel->insertColumnTyped(j, type, headerName, tableModel->index(0, j).parent());
+			// the j does work for small examples, but not for big coming from cdb
+			//tableModel->insertColumnTyped(0, type, headerName);
+
+			types.append(type);
+			headerNames.append(headerName);
 		}
+		tableModel->insertColumnsTyped(types, headerNames);
 
 		// ROWS
 		QJsonArray linesArray = sheetObject["lines"].toArray();

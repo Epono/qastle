@@ -16,7 +16,7 @@ private:
 	QTableView* mCurrentTableView;
 	QVector<QTableView*> mTableViews;
 
-	void Qastle::initNewTableView(QTableView* tableView, TableModel* model = new TableModel(), const int tabIndex = -1);
+	QWidget* mPlusTab;
 
 public:
 	Qastle(QWidget* parent = Q_NULLPTR);

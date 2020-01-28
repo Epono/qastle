@@ -14,8 +14,12 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 
 	ui.statusbar->showMessage(QString("This is the status bar"));
 
+	mPlusTab = ui.tabWidget->widget(0);
+
 	// Add one (TODO: default) tab
-	addTab();
+	TableModel* defaultTableModel = new TableModel();
+	defaultTableModel->addFirstColumnAndRow();
+	addTab(0, defaultTableModel);
 
 	// TABS
 	(void)connect(ui.tabWidget, &QTabWidget::currentChanged, this, &Qastle::tabSelected);
@@ -27,26 +31,6 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 
 	(void)connect(ui.actionAddColumn, &QAction::triggered, this, &Qastle::slotOpenModalAddColumnEnd);
 	(void)connect(ui.actionQuit, &QAction::triggered, this, &QApplication::quit);
-}
-
-void Qastle::initNewTableView(QTableView* tableView, TableModel* model, const int tabIndex) {
-	// TODO: ugly hack to start at 1
-	model->setSheetName(QString("Sheet %1").arg(tabIndex + 1 + (tabIndex == -1 ? 1 : 0)));
-	tableView->setModel(model);
-
-	tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-	tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-	tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-	tableView->verticalHeader()->setMinimumWidth(20);
-
-	(void)connect(tableView, &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuGrid);
-
-	// HEADERS
-	(void)connect(tableView->horizontalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuTopHeader);
-	(void)connect(tableView->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::topHeaderDoubleClicked);
-
-	(void)connect(tableView->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuSideHeader);
-	(void)connect(tableView->verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::sideHeaderDoubleClicked);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,21 +56,18 @@ void Qastle::slotLoadFromJson() {
 	}
 	mTableViews.clear();
 
-	// TODO: Use iterator and while to avoid this convoluted way to not miss any sheets when deleting widgets while looping over widgets vector
-	QVector<int> indicesToRemove;
-	// Delete old tabs (except "+" tab)
-	for (int i = 0; i < ui.tabWidget->tabBar()->count(); ++i) {
-		if (ui.tabWidget->tabText(i).compare(QString("+")) == 0) {
-			// TODO: break?
+	// Remove and delete old tabs (except not deleting "+" tab)
+	int temp = 0;
+	while (ui.tabWidget->count() > 1) {
+		QWidget* tab = ui.tabWidget->widget(temp);
+		if (ui.tabWidget->tabText(temp).compare(QString("+")) == 0) {
 			continue;
 		}
-		indicesToRemove.append(i);
+		else {
+			delete tab;
+		}
 	}
-	for (int i = indicesToRemove.size() - 1; i >= 0; --i) {
-		QWidget* tab = ui.tabWidget->widget(i);
-		ui.tabWidget->removeTab(i);
-		delete tab;
-	}
+	ui.tabWidget->clear();
 	//
 
 	QVector<TableModel*> tableModels = ImportExport::loadFromJson(fileName);
@@ -96,6 +77,8 @@ void Qastle::slotLoadFromJson() {
 
 		addTab(i, tableModel);
 	}
+
+	ui.tabWidget->addTab(mPlusTab, "+");
 
 	ui.tabWidget->tabBar()->setCurrentIndex(0);
 	mCurrentTableView = mTableViews[0];
@@ -132,6 +115,11 @@ void Qastle::tabDoubleClicked(const int selectedTabIndex) {
 }
 
 void Qastle::addTab(const int selectedTabIndex, TableModel* tableModel) {
+	// TODO: handle sheets with "@" (meaning sub sheet)
+	if (tableModel->sheetName().contains("@")) {
+		return;
+	}
+
 	ui.tabWidget->blockSignals(true);
 
 	QWidget* newTab = new QWidget(ui.tabWidget);
@@ -139,12 +127,35 @@ void Qastle::addTab(const int selectedTabIndex, TableModel* tableModel) {
 	QTableView* tableView = new QTableView();
 	layout->addWidget(tableView);
 
-	initNewTableView(tableView, tableModel, selectedTabIndex);
+	// Init table view
+	// TODO: add default name
+
+	tableView->setModel(tableModel);
+
+	tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+	tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+	tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+	tableView->verticalHeader()->setMinimumWidth(20);
+
+	(void)connect(tableView, &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuGrid);
+
+	// HEADERS
+	(void)connect(tableView->horizontalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuTopHeader);
+	(void)connect(tableView->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::topHeaderDoubleClicked);
+
+	(void)connect(tableView->verticalHeader(), &QWidget::customContextMenuRequested, this, &Qastle::showContextMenuSideHeader);
+	(void)connect(tableView->verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::sideHeaderDoubleClicked);
+	//
+
 	mTableViews.append(tableView);
 	mCurrentTableView = tableView;
 
 	ui.tabWidget->insertTab(selectedTabIndex, newTab, tableModel->sheetName());
+	ui.tabWidget->setTabText(selectedTabIndex, tableModel->sheetName());
 	ui.tabWidget->tabBar()->setCurrentIndex(selectedTabIndex);
+
+	// Move "+" back at the end
+	
 
 	ui.tabWidget->blockSignals(false);
 }
@@ -153,8 +164,11 @@ void Qastle::addTab(const int selectedTabIndex, TableModel* tableModel) {
 void Qastle::tabSelected(const int selectedTabIndex) {
 	QString text(ui.tabWidget->tabText(selectedTabIndex));
 
+	// TODO: string compare or last place compare?
 	if (text.compare(QString("+")) == 0) {
-		addTab(selectedTabIndex);
+		TableModel* tableModel = new TableModel();
+		tableModel->addFirstColumnAndRow();
+		addTab(selectedTabIndex, tableModel);
 	}
 	else {
 		mCurrentTableView = mTableViews[selectedTabIndex];
