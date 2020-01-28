@@ -8,7 +8,7 @@
   - [ ] Separators
   - [ ] Sheets
     - [x] Support one sheet
-    - [ ] Support multiple sheets
+    - [x] Support multiple sheets
     - [x] Add
     - [x] Edit (change name)
     - [ ] Remove
@@ -55,9 +55,9 @@
   - [ ] Import
     - [x] Simple import (one sheet, no error handling)
     - [ ] Error handling
-    - [ ] Multiple sheets
+    - [x] Multiple sheets
   - [ ] Export
     - [x] Simple Export (one sheet, no error handling)
     - [ ] Error handling
-    - [ ] Multiple sheets
+    - [x] Multiple sheets
 - [ ] 2D Level Editor (later)
