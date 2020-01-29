@@ -355,7 +355,7 @@ MigrationBackup/
 
 
 ############################################# CUSTOM
-data.json
+tmp/
 Makefile
 Makefile.Debug
 Makefile.Release
