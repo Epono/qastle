@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QTableView>
 #include <QHeaderView>
+#include <QUndoStack>
 #include "ui_qastle.h"
 #include "ui_column.h"
 
@@ -13,10 +14,10 @@ class Qastle : public QMainWindow
 	Q_OBJECT
 private:
 	Ui::MainWindow ui;
-	QTableView* mCurrentTableView;
-	QVector<QTableView*> mTableViews;
+	QTableView* m_currentTableView;
+	QVector<QTableView*> m_tableViews;
 
-	QWidget* mPlusTab;
+	QWidget* m_plusTab;
 
 public:
 	Qastle(QWidget* parent = Q_NULLPTR);
@@ -26,6 +27,9 @@ public:
 	//void setCurrentTableView(QTableView* currentTableView);
 
 public slots:
+	void slotRedo();
+	void slotUndo();
+
 	void slotLoadFromJson();
 	void slotSaveToJson();
 

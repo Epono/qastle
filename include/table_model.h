@@ -2,23 +2,29 @@
 
 #include <QWidget>
 #include <QAbstractTableModel>
-#include <vector>
+#include <QUndoStack>
+
+#include "../include/utils.h"
 
 class TableModel : public QAbstractTableModel {
 
 	Q_OBJECT
 
+	friend class SetData;
+
 private:
-	QString mSheetName;
+	QString m_sheetName;
 	// TODO: en faire un type et avoir un vector de ce type ?
-	QVector <QMetaType::Type> mDataModel;
-	QVector <QVariant> mNewLineTemplate;
-	QVector <QString> mHeaders;
+	QVector <QastleType> m_dataModel;
+	QVector <QVariant> m_newLineTemplate;
+	QVector <QString> m_headers;
 
-	QVector <QVector <QVariant> > mTableData;
+	QVector <QVector <QVariant> > m_tableData;
 
-	void addTypeToTemplate(int column, const QMetaType::Type type, const QString headerName);
-	void addTypeToExistingData(int column, const QMetaType::Type type);
+	QUndoStack* m_undoStack;
+
+	void addTypeToTemplate(int column, const QastleType type, const QString headerName);
+	void addTypeToExistingData(int column, const QastleType type);
 
 public:
 	void addFirstColumnAndRow();
@@ -32,8 +38,8 @@ public:
 	int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
 	// Except this one
-	bool insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent = QModelIndex());
-	bool insertColumnsTyped(const QVector<QMetaType::Type> types, const QVector<QString> headerNames, const QModelIndex& parent = QModelIndex());
+	bool insertColumnTyped(int column, const QastleType type, const QString headerName, const QModelIndex& parent = QModelIndex());
+	bool insertColumnsTyped(const QVector<QastleType> types, const QVector<QString> headerNames, const QModelIndex& parent = QModelIndex());
 	//bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 	bool removeColumns(int column, int count, const QModelIndex& parent = QModelIndex());
 
@@ -49,7 +55,7 @@ public:
 	void setHeaderAtIndex(const int index, const QString newHeaderName);
 
 	// ACCESSORS
-	QVector <QMetaType::Type> dataModel() const;
+	QVector <QastleType> dataModel() const;
 	//void setDataModel(const QVector <QMetaType::Type>& dataModel);
 
 	QVector <QVariant> newLineTemplate() const;
@@ -63,6 +69,9 @@ public:
 
 	QString sheetName() const;
 	void setSheetName(const QString& sheetName);
+
+	QUndoStack* undoStack() const;
+	void setUndoStack(QUndoStack* undoStack);
 
 	// TEMP
 	void addDummyData();

@@ -3,6 +3,8 @@
 
 #include "../include/column_dialog.h"
 
+#include "../include/utils.h"
+
 #include <QMenu>
 #include <QDebug>
 #include <QInputDialog>
@@ -14,7 +16,7 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 
 	ui.statusbar->showMessage(QString("This is the status bar"));
 
-	mPlusTab = ui.tabWidget->widget(0);
+	m_plusTab = ui.tabWidget->widget(0);
 
 	// Add one (TODO: default) tab
 	TableModel* defaultTableModel = new TableModel();
@@ -31,7 +33,35 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 
 	(void)connect(ui.actionAddColumn, &QAction::triggered, this, &Qastle::slotOpenModalAddColumnEnd);
 	(void)connect(ui.actionQuit, &QAction::triggered, this, &QApplication::quit);
+
+	(void)connect(ui.actionRedo, &QAction::triggered, this, &Qastle::slotRedo);
+	(void)connect(ui.actionUndo, &QAction::triggered, this, &Qastle::slotUndo);
+
+	//undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+	//undoAction->setShortcuts(QKeySequence::Undo);
+
+	//redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+	//redoAction->setShortcuts(QKeySequence::Redo);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// REDO / UNDO
+void Qastle::slotRedo() {
+	qDebug() << "Redo";
+
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
+	TableModel* modelNonConst = const_cast<TableModel*>(model);
+	modelNonConst->undoStack()->redo();
+}
+
+void Qastle::slotUndo() {
+	qDebug() << "Undo";
+
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
+	TableModel* modelNonConst = const_cast<TableModel*>(model);
+	modelNonConst->undoStack()->undo();
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // LOAD / SAVE
@@ -50,11 +80,11 @@ void Qastle::slotLoadFromJson() {
 	ui.tabWidget->blockSignals(true);
 
 	// Delete views
-	for (int i = 0; i < mTableViews.size(); ++i) {
-		QTableView* tableView = mTableViews[i];
+	for (int i = 0; i < m_tableViews.size(); ++i) {
+		QTableView* tableView = m_tableViews[i];
 		delete tableView;
 	}
-	mTableViews.clear();
+	m_tableViews.clear();
 
 	// Remove and delete old tabs (except not deleting "+" tab)
 	int temp = 0;
@@ -78,10 +108,10 @@ void Qastle::slotLoadFromJson() {
 		addTab(i, tableModel);
 	}
 
-	ui.tabWidget->addTab(mPlusTab, "+");
+	ui.tabWidget->addTab(m_plusTab, "+");
 
 	ui.tabWidget->tabBar()->setCurrentIndex(0);
-	mCurrentTableView = mTableViews[0];
+	m_currentTableView = m_tableViews[0];
 
 	ui.tabWidget->blockSignals(false);
 }
@@ -92,7 +122,7 @@ void Qastle::slotSaveToJson() {
 	QString fileName = QFileDialog::getSaveFileName(this, QString("Save file"), QString(), QString("JSON file (*.json)"));
 
 	QVector<TableModel*> tableModels;
-	for (QTableView* tableView : mTableViews) {
+	for (QTableView* tableView : m_tableViews) {
 		const TableModel* model = qobject_cast<const TableModel*>(tableView->model());
 		TableModel* modelNonConst = const_cast<TableModel*>(model);
 		tableModels.append(modelNonConst);
@@ -106,7 +136,7 @@ void Qastle::tabDoubleClicked(const int selectedTabIndex) {
 	bool ok;
 	QString text = QInputDialog::getText(this, QString("Change name"), QString("Sheet name"), QLineEdit::Normal, ui.tabWidget->tabText(selectedTabIndex), &ok);
 	if (ok && !text.isEmpty()) {
-		const TableModel* model = qobject_cast<const TableModel*>(mTableViews[selectedTabIndex]->model());
+		const TableModel* model = qobject_cast<const TableModel*>(m_tableViews[selectedTabIndex]->model());
 		TableModel* modelNonConst = const_cast<TableModel*>(model);
 
 		modelNonConst->setSheetName(text);
@@ -147,15 +177,14 @@ void Qastle::addTab(const int selectedTabIndex, TableModel* tableModel) {
 	(void)connect(tableView->verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &Qastle::sideHeaderDoubleClicked);
 	//
 
-	mTableViews.append(tableView);
-	mCurrentTableView = tableView;
+	m_tableViews.append(tableView);
+	m_currentTableView = tableView;
 
 	ui.tabWidget->insertTab(selectedTabIndex, newTab, tableModel->sheetName());
 	ui.tabWidget->setTabText(selectedTabIndex, tableModel->sheetName());
-	ui.tabWidget->tabBar()->setCurrentIndex(selectedTabIndex);
 
 	// Move "+" back at the end
-	
+	ui.tabWidget->tabBar()->setCurrentIndex(selectedTabIndex);
 
 	ui.tabWidget->blockSignals(false);
 }
@@ -171,14 +200,14 @@ void Qastle::tabSelected(const int selectedTabIndex) {
 		addTab(selectedTabIndex, tableModel);
 	}
 	else {
-		mCurrentTableView = mTableViews[selectedTabIndex];
+		m_currentTableView = m_tableViews[selectedTabIndex];
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // GRID
 void Qastle::showContextMenuGrid(const QPoint& pos) {
-	QModelIndex index = mCurrentTableView->indexAt(pos);
+	QModelIndex index = m_currentTableView->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
 	// TODO: voir si ça peut pas déborder par la droite
@@ -194,16 +223,18 @@ void Qastle::showContextMenuGrid(const QPoint& pos) {
 		menu->addAction(new QAction("Ajouter une ligne", this));
 	}
 
-	menu->popup(mCurrentTableView->viewport()->mapToGlobal(pos));
+	menu->popup(m_currentTableView->viewport()->mapToGlobal(pos));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // HORIZONTAL HEADER
 
 void Qastle::showContextMenuTopHeader(const QPoint& pos) {
-	QModelIndex index = mCurrentTableView->indexAt(pos);
+	QModelIndex index = m_currentTableView->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
+
+	QAction* actionAppendColumn;
 
 	if (index.isValid()) {
 		QAction* actionRemoveColumn = new QAction(QString("Remove column %1").arg(index.column()), this);
@@ -215,20 +246,24 @@ void Qastle::showContextMenuTopHeader(const QPoint& pos) {
 		actionPrependColumn->setData(index);
 		(void)connect(actionPrependColumn, &QAction::triggered, this, &Qastle::slotPrependColumn);
 		menu->addAction(actionPrependColumn);
+
+		actionAppendColumn = new QAction(QString("Insert after column %1").arg(index.column()), this);
+	}
+	else {
+		actionAppendColumn = new QAction(QString("Insert column"));
 	}
 
-	QAction* actionAppendColumn = new QAction(QString("Insert after column %1").arg(index.column()), this);
 	actionAppendColumn->setData(index);
 	(void)connect(actionAppendColumn, &QAction::triggered, this, &Qastle::slotAppendColumn);
 	menu->addAction(actionAppendColumn);
 
-	menu->popup(mCurrentTableView->viewport()->mapToGlobal(pos));
+	menu->popup(m_currentTableView->viewport()->mapToGlobal(pos));
 }
 
 void Qastle::slotRemoveColumn() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
 	// TODO: ConfirmDialog
-	mCurrentTableView->model()->removeColumn(index.column(), index);
+	m_currentTableView->model()->removeColumn(index.column(), index);
 }
 
 void Qastle::slotPrependColumn() {
@@ -242,7 +277,7 @@ void Qastle::slotAppendColumn() {
 }
 
 void Qastle::slotOpenModalAddColumnEnd() {
-	const TableModel* model = qobject_cast<const TableModel*>(mCurrentTableView->model());
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	openModalAddColumn(model->headers().size());
 }
 
@@ -255,10 +290,10 @@ void Qastle::openModalAddColumn(const int selectedColumnIndex = -1) {
 }
 
 void Qastle::slotColumnDialogAccepted(const int selectedColumnIndex, const QVariant data, const QString headerName) {
-	const TableModel* model = qobject_cast<const TableModel*>(mCurrentTableView->model());
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	TableModel* modelNonConst = const_cast<TableModel*>(model);
 
-	QMetaType::Type type = QMetaType::Type(data.toInt());
+	QastleType type = static_cast<QastleType>(data.toInt());
 	modelNonConst->insertColumnTyped(selectedColumnIndex, type, headerName);
 }
 
@@ -266,7 +301,7 @@ void Qastle::topHeaderDoubleClicked(int logicalIndex) {
 	bool ok;
 
 	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
-	const TableModel* model = qobject_cast<const TableModel*>(mCurrentTableView->model());
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	if (logicalIndex == -1) {
 		// Outside, new column
 		openModalAddColumn(model->headers().size());
@@ -284,9 +319,11 @@ void Qastle::topHeaderDoubleClicked(int logicalIndex) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // VERTICAL HEADER
 void Qastle::showContextMenuSideHeader(const QPoint& pos) {
-	QModelIndex index = mCurrentTableView->indexAt(pos);
+	QModelIndex index = m_currentTableView->indexAt(pos);
 
 	QMenu* menu = new QMenu(this);
+
+	QAction* actionAppendRow;
 
 	if (index.isValid()) {
 		QAction* actionRemoveRow = new QAction(QString("Remove row %1").arg(index.row()), this);
@@ -298,38 +335,42 @@ void Qastle::showContextMenuSideHeader(const QPoint& pos) {
 		actionPrependRow->setData(index);
 		(void)connect(actionPrependRow, &QAction::triggered, this, &Qastle::slotPrependRow);
 		menu->addAction(actionPrependRow);
-	}
 
-	QAction* actionAppendRow = new QAction(QString("Insert after row %1").arg(index.row()), this);
+		actionAppendRow = new QAction(QString("Insert after row %1").arg(index.row()), this);
+	}
+	else {
+		actionAppendRow = new QAction(QString("Insert row"));
+	}
+	
 	actionAppendRow->setData(index);
 	(void)connect(actionAppendRow, &QAction::triggered, this, &Qastle::slotAppendRow);
 	menu->addAction(actionAppendRow);
 
-	menu->popup(mCurrentTableView->viewport()->mapToGlobal(pos));
+	menu->popup(m_currentTableView->viewport()->mapToGlobal(pos));
 }
 
 // https://stackoverflow.com/questions/28646914/qaction-with-custom-parameter
 void Qastle::slotRemoveRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
-	mCurrentTableView->model()->removeRow(index.row(), index);
+	m_currentTableView->model()->removeRow(index.row(), index);
 }
 
 void Qastle::slotPrependRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
-	mCurrentTableView->model()->insertRow(index.row(), index);
+	m_currentTableView->model()->insertRow(index.row(), index);
 }
 
 void Qastle::slotAppendRow() {
 	QModelIndex index = qobject_cast<QAction*>(sender())->data().toModelIndex();
-	mCurrentTableView->model()->insertRow(index.row() + 1, index);
+	m_currentTableView->model()->insertRow(index.row() + 1, index);
 }
 
 void Qastle::sideHeaderDoubleClicked(int logicalIndex) {
 	//on fait un premier cast pour convertir le QAbstractItemModel en Qfilesystemmodel
-	const TableModel* model = qobject_cast<const TableModel*>(mCurrentTableView->model());
+	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	if (logicalIndex == -1) {
 		// Outside, new row
-		mCurrentTableView->model()->insertRow(model->rowCount());
+		m_currentTableView->model()->insertRow(model->rowCount());
 		//openModalAddColumn(model->headers().size());
 	}
 	else {

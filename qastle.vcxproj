@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\column_dialog.cpp" />
+    <ClCompile Include="src\commands\set_data.cpp" />
     <ClCompile Include="src\import_export.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\qastle.cpp" />
@@ -103,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\column_dialog.h" />
+    <ClInclude Include="include\commands\set_data.h" />
     <ClInclude Include="include\import_export.h" />
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="x64\Debug\uic\ui\ui_column.h" />

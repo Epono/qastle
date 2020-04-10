@@ -83,11 +83,16 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionAddColumn"/>
+   <addaction name="separator"/>
    <addaction name="actionLoadFromJson"/>
    <addaction name="actionSaveToJson"/>
-   <addaction name="actionQuit"/>
    <addaction name="separator"/>
    <addaction name="actionCheck"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionQuit"/>
   </widget>
   <action name="actionAddColumn">
    <property name="text">
@@ -130,6 +135,28 @@
    </property>
    <property name="toolTip">
     <string>Check</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

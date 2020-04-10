@@ -57,13 +57,13 @@ QVector<TableModel*> ImportExport::loadFromJson(const QString& filename) {
 		// TODO: Load in a new sheet to avoid conflicts
 		tableModel->removeColumns(0, 100);
 
-		QVector<QMetaType::Type> types;
+		QVector<QastleType> types;
 		QVector<QString> headerNames;
 
 		for (int j = 0; j < columnsArray.size(); ++j) {
 			QJsonObject columnObject = columnsArray[j].toObject();
 			QString headerName(columnObject["name"].toString());
-			QMetaType::Type type(Utils::getTypeFromStringType(columnObject["typeStr"].toString()));
+			QastleType type(Utils::getTypeFromStringType(columnObject["typeStr"].toString()));
 
 			// TODO: j instead of 0?
 			//tableModel->insertColumnTyped(j, type, headerName, tableModel->index(0, j).parent());
@@ -82,30 +82,26 @@ QVector<TableModel*> ImportExport::loadFromJson(const QString& filename) {
 			QVector<QVariant> data;
 
 			for (int k = 0; k < tableModel->dataModel().size(); ++k) {
-				QMetaType::Type type = tableModel->dataModel()[k];
+				QastleType type = tableModel->dataModel()[k];
 				QString headerName = tableModel->headers()[k];
 
 				switch (type)
 				{
-				case QMetaType::QString:
+				case QastleType::TString:
 					data.append(lineObject[headerName].toString());
 					break;
-				case QMetaType::Bool:
+				case QastleType::TBool:
 					data.append(lineObject[headerName].toBool());
 					break;
-				case QMetaType::Int:
+				case QastleType::TInt:
 					data.append(lineObject[headerName].toInt());
 					break;
-				case QMetaType::Float:
+				case QastleType::TFloat:
 					data.append(lineObject[headerName].toDouble());
 					break;
-				case QMetaType::Double:
-					data.append(lineObject[headerName].toDouble());
-					break;
-				case QMetaType::Type::QCursor:
-					data.append(QString("Not supported"));
 				default:
 					// TODO
+					data.append(QString("Not supported"));
 					break;
 				}
 			}
@@ -145,8 +141,8 @@ bool ImportExport::saveToJson(const QString& filename, const QVector<TableModel*
 
 			// TODO: refacto pour éviter 12000 appels de fonction ? inline
 			// TODO: gérer le param "display" (pour les int/float? notamment) (juste pour intéropérabilité avec cdb, osef un peu sinon)
-			QMetaType::Type type = model->dataModel()[i];
-			columnObject["typeStr"] = Utils::getTypeFromStringType(type);
+			QastleType type = model->dataModel()[i];
+			columnObject["typeStr"] = Utils::getTypeIdFromType(type);
 			columnObject["name"] = model->headers()[i];
 			columnsArray.append(columnObject);
 		}
@@ -157,23 +153,20 @@ bool ImportExport::saveToJson(const QString& filename, const QVector<TableModel*
 			QJsonObject lineObject;
 			for (int i = 0; i < model->dataModel().size(); ++i) {
 				// REFACTO
-				QMetaType::Type type = model->dataModel()[i];
+				QastleType type = model->dataModel()[i];
 				switch (type)
 				{
-				case QMetaType::QString:
+				case QastleType::TString:
 					lineObject[model->headers()[i]] = line[i].toString();
 					break;
-				case QMetaType::Bool:
+				case QastleType::TBool:
 					lineObject[model->headers()[i]] = line[i].toBool();
 					break;
-				case QMetaType::Int:
+				case QastleType::TInt:
 					lineObject[model->headers()[i]] = line[i].toInt();
 					break;
-				case QMetaType::Float:
+				case QastleType::TFloat:
 					lineObject[model->headers()[i]] = line[i].toFloat();
-					break;
-				case QMetaType::Double:
-					lineObject[model->headers()[i]] = line[i].toDouble();
 					break;
 				}
 				//

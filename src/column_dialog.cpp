@@ -1,4 +1,5 @@
 #include "../include/column_dialog.h"
+#include "../include/utils.h"
 #include <QPushButton>
 
 ColumnDialog::ColumnDialog(QWidget* parent, const int selectedColumnIndex) : QDialog(parent) {
@@ -9,11 +10,10 @@ ColumnDialog::ColumnDialog(QWidget* parent, const int selectedColumnIndex) : QDi
 	setModal(true);
 	lineEdit->setFocus();
 
-	comboBox->addItem("Float", QVariant((float)QMetaType::Type::Float));
-	comboBox->addItem("Bool", QVariant((float)QMetaType::Type::Bool));
-	comboBox->addItem("Int", QVariant((float)QMetaType::Type::Int));
-	comboBox->addItem("String", QVariant((float)QMetaType::Type::QString));
-	comboBox->addItem("Double", QVariant((float)QMetaType::Type::Double));
+	comboBox->addItem("Float", QVariant((int)QastleType::TFloat));
+	comboBox->addItem("Bool", QVariant((int)QastleType::TBool));
+	comboBox->addItem("Int", QVariant((int)QastleType::TInt));
+	comboBox->addItem("String", QVariant((int)QastleType::TString));
 
 	QPushButton* okButton = buttonBox->button(QDialogButtonBox::StandardButton::Ok);
 	okButton->disconnect();

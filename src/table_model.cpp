@@ -1,5 +1,8 @@
 #include "../include/table_model.h"
 
+#include "../include/commands/set_data.h"
+#include "../include/qastle.h"
+
 #include <QDebug>
 
 // Advanced example?
@@ -14,27 +17,28 @@
 //}
 
 void TableModel::addDummyData() {
-	insertColumnTyped(0, QMetaType::Type::Bool, "Dead?");
-	insertColumnTyped(0, QMetaType::Type::Int, "Age");
-	insertColumnTyped(0, QMetaType::Type::Float, "Height");
-	insertColumnTyped(0, QMetaType::Type::Double, "Weight");
-	insertColumnTyped(0, QMetaType::Type::QString, "Name");
+	insertColumnTyped(0, QastleType::TBool, "Dead?");
+	insertColumnTyped(0, QastleType::TInt, "Age");
+	insertColumnTyped(0, QastleType::TFloat, "Height");
+	insertColumnTyped(0, QastleType::TString, "Name");
 
 	for (int i = 0; i < 10; ++i) {
-		QVector<QVariant> tempVector(mNewLineTemplate);
-		mTableData.push_back(tempVector);
+		QVector<QVariant> tempVector(m_newLineTemplate);
+		m_tableData.push_back(tempVector);
 	}
 }
 
 void TableModel::addFirstColumnAndRow() {
-	insertColumnTyped(0, QMetaType::Type::Int, "ID");
+	insertColumnTyped(0, QastleType::TInt, "ID");
 
-	QVector<QVariant> tempVector(mNewLineTemplate);
-	mTableData.push_back(tempVector);
+	QVector<QVariant> tempVector(m_newLineTemplate);
+	m_tableData.push_back(tempVector);
 }
 
 TableModel::TableModel(QObject* parent) {
-	mSheetName = QString("New sheet");
+	m_sheetName = QString("New sheet");
+
+	m_undoStack = new QUndoStack(this);
 }
 
 Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
@@ -42,12 +46,12 @@ Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
 }
 
 int TableModel::rowCount(const QModelIndex& parent) const {
-	return mTableData.size();
+	return m_tableData.size();
 }
 
 int TableModel::columnCount(const QModelIndex& parent) const {
-	if (mTableData.size() > 0) {
-		return mTableData[0].size();
+	if (m_tableData.size() > 0) {
+		return m_tableData[0].size();
 	}
 	else {
 		return 0;
@@ -64,7 +68,7 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 	}
 	else {
 		if (role == Qt::ItemDataRole::DisplayRole) {
-			return QString("%1\n(%2)").arg(mHeaders[section]).arg(QMetaType::typeName(mDataModel[section]));
+			return QString("%1\n(%2)").arg(m_headers[section]).arg(Utils::getTypeNameFromType(m_dataModel[section]));
 		}
 		return QVariant();
 	}
@@ -72,14 +76,11 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 
 // https://stackoverflow.com/questions/55855284/qabstracttablemodel-editing-without-clearing-previous-data-in-cell
 bool TableModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-	int x = index.column();
-	int y = index.row();
-
 	if (role == Qt::EditRole) {
 		if (!checkIndex(index)) {
 			return false;
 		}
-		mTableData[index.row()][index.column()] = value;
+		m_undoStack->push(new SetData(index, value, this));
 		return true;
 	}
 
@@ -88,15 +89,15 @@ bool TableModel::setData(const QModelIndex& index, const QVariant& value, int ro
 
 QVariant TableModel::data(const QModelIndex& index, int role) const {
 	if (role == Qt::ItemDataRole::DisplayRole) {
-		return mTableData[index.row()][index.column()];
+		return m_tableData[index.row()][index.column()];
 	}
 	else if (role == Qt::ItemDataRole::EditRole) {
-		return mTableData[index.row()][index.column()];
+		return m_tableData[index.row()][index.column()];
 	}
 	return QVariant();
 }
 
-bool TableModel::insertColumnsTyped(const QVector<QMetaType::Type> types, const QVector<QString> headerNames, const QModelIndex& parent) {
+bool TableModel::insertColumnsTyped(const QVector<QastleType> types, const QVector<QString> headerNames, const QModelIndex& parent) {
 	emit(this->beginInsertColumns(QModelIndex(), 0, headerNames.size()));
 
 	for (int i = 0; i < headerNames.size(); ++i) {
@@ -108,7 +109,7 @@ bool TableModel::insertColumnsTyped(const QVector<QMetaType::Type> types, const 
 	return true;
 }
 
-bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const QString headerName, const QModelIndex& parent) {
+bool TableModel::insertColumnTyped(int column, const QastleType type, const QString headerName, const QModelIndex& parent) {
 	emit(this->beginInsertColumns(QModelIndex(), column, column));
 
 	addTypeToTemplate(column, type, headerName);
@@ -120,20 +121,20 @@ bool TableModel::insertColumnTyped(int column, const QMetaType::Type type, const
 
 bool TableModel::removeColumns(int column, int count, const QModelIndex& parent) {
 	// Hack to allow removeColumns(0, 100000);
-	if (column + count > mDataModel.size()) {
-		count = mDataModel.size() - column;
+	if (column + count > m_dataModel.size()) {
+		count = m_dataModel.size() - column;
 	}
 	if (count == 0) {
 		return true;
 	}
 	emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
 
-	mDataModel.remove(column, count);
-	mNewLineTemplate.remove(column, count);
-	mHeaders.remove(column, count);
+	m_dataModel.remove(column, count);
+	m_newLineTemplate.remove(column, count);
+	m_headers.remove(column, count);
 
-	for (int j = 0; j < mTableData.size(); ++j) {
-		mTableData[j].remove(column, count);
+	for (int j = 0; j < m_tableData.size(); ++j) {
+		m_tableData[j].remove(column, count);
 	}
 
 	emit(this->endRemoveColumns());
@@ -144,7 +145,7 @@ bool TableModel::insertRowWithData(int row, QVector <QVariant>& data, const QMod
 	emit(this->beginInsertRows(QModelIndex(), row, row));
 
 	QVector<QVariant> newVector(data);
-	mTableData.insert(row, newVector);
+	m_tableData.insert(row, newVector);
 
 	emit(this->endInsertRows());
 	return true;
@@ -154,8 +155,8 @@ bool TableModel::insertRows(int row, int count, const QModelIndex& parent) {
 	emit(this->beginInsertRows(QModelIndex(), row, row + count - 1));
 
 	for (int i = 0; i < count; ++i) {
-		QVector<QVariant> newVector(mNewLineTemplate);
-		mTableData.insert(row, newVector);
+		QVector<QVariant> newVector(m_newLineTemplate);
+		m_tableData.insert(row, newVector);
 	}
 
 	emit(this->endInsertRows());
@@ -165,7 +166,7 @@ bool TableModel::insertRows(int row, int count, const QModelIndex& parent) {
 bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
 	emit(this->beginRemoveRows(QModelIndex(), row, row + count - 1));
 
-	mTableData.remove(row, count);
+	m_tableData.remove(row, count);
 
 	emit(this->endRemoveRows());
 	return true;
@@ -173,72 +174,63 @@ bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // PRIVATE
-void TableModel::addTypeToTemplate(int column, const QMetaType::Type type, const QString headerName) {
-	mDataModel.insert(column, type);
+void TableModel::addTypeToTemplate(int column, const QastleType type, const QString headerName) {
+	m_dataModel.insert(column, type);
 
 	switch (type)
 	{
-	case QMetaType::QString:
-		mNewLineTemplate.insert(column, QString());
+	case QastleType::TString:
+		m_newLineTemplate.insert(column, QString());
 		break;
-	case QMetaType::Bool:
-		mNewLineTemplate.insert(column, false);
+	case QastleType::TBool:
+		m_newLineTemplate.insert(column, false);
 		break;
-	case QMetaType::Int:
-		mNewLineTemplate.insert(column, int(0));
+	case QastleType::TInt:
+		m_newLineTemplate.insert(column, int(0));
 		break;
-	case QMetaType::Float:
-		mNewLineTemplate.insert(column, float(0));
+	case QastleType::TFloat:
+		m_newLineTemplate.insert(column, float(0));
 		break;
-	case QMetaType::Double:
-		mNewLineTemplate.insert(column, double(0));
-		break;
-	case QMetaType::Type::QCursor:
-		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg(type);
-		mNewLineTemplate.insert(column, QString());
 	default:
 		// TODO
-		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg(type);
+		qDebug() << QString("[addTypeToTemplate] Type not found: %1").arg((int)type);
 		break;
 	}
 
-	mHeaders.insert(column, headerName);
+	m_headers.insert(column, headerName);
 }
 
-void TableModel::addTypeToExistingData(int column, const QMetaType::Type type) {
-	for (int j = 0; j < mTableData.size(); ++j) {
+void TableModel::addTypeToExistingData(int column, const QastleType type) {
+	for (int j = 0; j < m_tableData.size(); ++j) {
 		switch (type)
 		{
-		case QMetaType::QString:
-			mTableData[j].insert(column, QString());
+		case QastleType::TString:
+			m_tableData[j].insert(column, QString());
 			break;
-		case QMetaType::Bool:
-			mTableData[j].insert(column, false);
+		case QastleType::TBool:
+			m_tableData[j].insert(column, false);
 			break;
-		case QMetaType::Int:
-			mTableData[j].insert(column, int(0));
+		case QastleType::TInt:
+			m_tableData[j].insert(column, int(0));
 			break;
-		case QMetaType::Float:
-			mTableData[j].insert(column, float(0));
-			break;
-		case QMetaType::Double:
-			mTableData[j].insert(column, double(0));
+		case QastleType::TFloat:
+			m_tableData[j].insert(column, float(0));
 			break;
 		}
 	}
 }
 
 // ACCESSORS
-QVector <QMetaType::Type> TableModel::dataModel() const {
-	return mDataModel;
+QVector <QastleType> TableModel::dataModel() const {
+	return m_dataModel;
 }
 
-//void TableModel::setDataModel(const QVector <QMetaType::Type>& dataModel) {
+//void TableModel::setDataModel(const QVector <QastleType>& dataModel) {
 //	mDataModel = dataModel;
 //}
 
 QVector <QVariant> TableModel::newLineTemplate() const {
-	return mNewLineTemplate;
+	return m_newLineTemplate;
 }
 
 //void TableModel::setNewLineTemplate(const QVector <QVariant>& newLineTemplate) {
@@ -246,7 +238,7 @@ QVector <QVariant> TableModel::newLineTemplate() const {
 //}
 
 QVector <QString> TableModel::headers() const {
-	return mHeaders;
+	return m_headers;
 }
 
 //void TableModel::setHeaders(const QVector <QString>& headers) {
@@ -255,11 +247,11 @@ QVector <QString> TableModel::headers() const {
 
 void TableModel::setHeaderAtIndex(const int index, const QString newHeaderName) {
 	// TODO: check in range
-	mHeaders[index] = newHeaderName;
+	m_headers[index] = newHeaderName;
 }
 
 QVector <QVector <QVariant> > TableModel::tableData() const {
-	return mTableData;
+	return m_tableData;
 }
 
 //void TableModel::setTableData(const QVector <QVector <QVariant> >& tableData) {
@@ -267,9 +259,17 @@ QVector <QVector <QVariant> > TableModel::tableData() const {
 //}
 
 QString TableModel::sheetName() const {
-	return mSheetName;
+	return m_sheetName;
 }
 
 void TableModel::setSheetName(const QString& sheetName) {
-	mSheetName = sheetName;
+	m_sheetName = sheetName;
+}
+
+QUndoStack* TableModel::undoStack() const {
+	return m_undoStack;
+}
+
+void TableModel::setUndoStack(QUndoStack* undoStack) {
+	m_undoStack = undoStack;
 }

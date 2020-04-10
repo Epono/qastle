@@ -23,6 +23,12 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
+    <Filter Include="Source Files\commands">
+      <UniqueIdentifier>{6ed1d480-bedc-4a72-bded-52b2782c208d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\commands">
+      <UniqueIdentifier>{22b3fc5f-11fd-45c7-9ed7-6d558d6ffa85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\qastle.h">
@@ -54,6 +60,9 @@
     <ClCompile Include="src\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\set_data.cpp">
+      <Filter>Source Files\commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Resources\qastle.qrc">
@@ -80,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="include\utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\commands\set_data.h">
+      <Filter>Header Files\commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
