@@ -47,16 +47,12 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // REDO / UNDO
 void Qastle::slotRedo() {
-	qDebug() << "Redo";
-
 	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	TableModel* modelNonConst = const_cast<TableModel*>(model);
 	modelNonConst->undoStack()->redo();
 }
 
 void Qastle::slotUndo() {
-	qDebug() << "Undo";
-
 	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	TableModel* modelNonConst = const_cast<TableModel*>(model);
 	modelNonConst->undoStack()->undo();
