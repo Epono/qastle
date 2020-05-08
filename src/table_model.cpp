@@ -1,6 +1,12 @@
 #include "../include/table_model.h"
 
-#include "../include/commands/set_data.h"
+#include "../include/commands/cell_set.h"
+#include "../include/commands/column_insert.h"
+#include "../include/commands/column_remove.h"
+#include "../include/commands/column_rename.h"
+#include "../include/commands/row_insert.h"
+#include "../include/commands/row_remove.h"
+
 #include "../include/qastle.h"
 
 #include <QDebug>
@@ -33,6 +39,8 @@ void TableModel::addFirstColumnAndRow() {
 
 	QVector<QVariant> tempVector(m_newLineTemplate);
 	m_tableData.push_back(tempVector);
+
+	m_undoStack->clear();
 }
 
 TableModel::TableModel(QObject* parent) {
@@ -80,7 +88,8 @@ bool TableModel::setData(const QModelIndex& index, const QVariant& value, int ro
 		if (!checkIndex(index)) {
 			return false;
 		}
-		m_undoStack->push(new SetData(index, value, this));
+		// Undo/Redo Stack
+		m_undoStack->push(new CellSet(index, value, this));
 		return true;
 	}
 
@@ -97,6 +106,7 @@ QVariant TableModel::data(const QModelIndex& index, int role) const {
 	return QVariant();
 }
 
+// Import version
 bool TableModel::insertColumnsTyped(const QVector<QastleType> types, const QVector<QString> headerNames, const QModelIndex& parent) {
 	emit(this->beginInsertColumns(QModelIndex(), 0, headerNames.size()));
 
@@ -109,13 +119,18 @@ bool TableModel::insertColumnsTyped(const QVector<QastleType> types, const QVect
 	return true;
 }
 
+// Classic version
 bool TableModel::insertColumnTyped(int column, const QastleType type, const QString headerName, const QModelIndex& parent) {
-	emit(this->beginInsertColumns(QModelIndex(), column, column));
 
-	addTypeToTemplate(column, type, headerName);
-	addTypeToExistingData(column, type);
+	// OLD
+	//emit(this->beginInsertColumns(QModelIndex(), column, column));
+	//addTypeToTemplate(column, type, headerName);
+	//addTypeToExistingData(column, type);
+	//emit(this->endInsertColumns());
 
-	emit(this->endInsertColumns());
+	// Undo/Redo Stack
+	m_undoStack->push(new ColumnInsert(column, type, headerName, this));
+
 	return true;
 }
 
@@ -127,20 +142,25 @@ bool TableModel::removeColumns(int column, int count, const QModelIndex& parent)
 	if (count == 0) {
 		return true;
 	}
-	emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
 
-	m_dataModel.remove(column, count);
-	m_newLineTemplate.remove(column, count);
-	m_headers.remove(column, count);
+	// OLD
+	//emit(this->beginRemoveColumns(QModelIndex(), column, column + count - 1));
+	//m_dataModel.remove(column, count);
+	//m_newLineTemplate.remove(column, count);
+	//m_headers.remove(column, count);
 
-	for (int j = 0; j < m_tableData.size(); ++j) {
-		m_tableData[j].remove(column, count);
-	}
+	//for (int j = 0; j < m_tableData.size(); ++j) {
+	//	m_tableData[j].remove(column, count);
+	//}
+	//emit(this->endRemoveColumns());
 
-	emit(this->endRemoveColumns());
+	// Undo/Redo Stack
+	m_undoStack->push(new ColumnRemove(column, count, this));
+
 	return true;
 }
 
+// Import version
 bool TableModel::insertRowWithData(int row, QVector <QVariant>& data, const QModelIndex& parent) {
 	emit(this->beginInsertRows(QModelIndex(), row, row));
 
@@ -151,25 +171,42 @@ bool TableModel::insertRowWithData(int row, QVector <QVariant>& data, const QMod
 	return true;
 }
 
+// Classic version
 bool TableModel::insertRows(int row, int count, const QModelIndex& parent) {
-	emit(this->beginInsertRows(QModelIndex(), row, row + count - 1));
+	// OLD
+	//emit(this->beginInsertRows(QModelIndex(), row, row + count - 1));
+	//for (int i = 0; i < count; ++i) {
+	//	QVector<QVariant> newVector(m_newLineTemplate);
+	//	m_tableData.insert(row, newVector);
+	//}
+	//emit(this->endInsertRows());
 
-	for (int i = 0; i < count; ++i) {
-		QVector<QVariant> newVector(m_newLineTemplate);
-		m_tableData.insert(row, newVector);
-	}
+	// Undo/Redo Stack
+	m_undoStack->push(new RowInsert(row, count, this));
 
-	emit(this->endInsertRows());
 	return true;
 }
 
 bool TableModel::removeRows(int row, int count, const QModelIndex& parent) {
-	emit(this->beginRemoveRows(QModelIndex(), row, row + count - 1));
+	// OLD
+	//emit(this->beginRemoveRows(QModelIndex(), row, row + count - 1));
+	//m_tableData.remove(row, count);
+	//emit(this->endRemoveRows());
 
-	m_tableData.remove(row, count);
+	// Undo/Redo Stack
+	m_undoStack->push(new RowRemove(row, count, this));
 
-	emit(this->endRemoveRows());
 	return true;
+}
+
+void TableModel::setHeaderAtIndex(const int index, const QString newHeaderName) {
+	// TODO: check in range
+
+	// OLD
+	//m_headers[index] = newHeaderName;
+
+	// Undo/Redo Stack
+	m_undoStack->push(new ColumnRename(index, newHeaderName, this));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,11 +281,6 @@ QVector <QString> TableModel::headers() const {
 //void TableModel::setHeaders(const QVector <QString>& headers) {
 //	mHeaders = headers;
 //}
-
-void TableModel::setHeaderAtIndex(const int index, const QString newHeaderName) {
-	// TODO: check in range
-	m_headers[index] = newHeaderName;
-}
 
 QVector <QVector <QVariant> > TableModel::tableData() const {
 	return m_tableData;

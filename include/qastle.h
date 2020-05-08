@@ -29,6 +29,7 @@ public:
 public slots:
 	void slotRedo();
 	void slotUndo();
+	void slotClearCell();
 
 	void slotLoadFromJson();
 	void slotSaveToJson();

@@ -10,7 +10,12 @@ class TableModel : public QAbstractTableModel {
 
 	Q_OBJECT
 
-	friend class SetData;
+	friend class CellSet;
+	friend class ColumnInsert;
+	friend class ColumnRemove;
+	friend class ColumnRename;
+	friend class RowInsert;
+	friend class RowRemove;
 
 private:
 	QString m_sheetName;

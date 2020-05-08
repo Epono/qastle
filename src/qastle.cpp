@@ -37,6 +37,8 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 	(void)connect(ui.actionRedo, &QAction::triggered, this, &Qastle::slotRedo);
 	(void)connect(ui.actionUndo, &QAction::triggered, this, &Qastle::slotUndo);
 
+	(void)connect(ui.actionClearCell, &QAction::triggered, this, &Qastle::slotClearCell);
+
 	//undoAction = undoStack->createUndoAction(this, tr("&Undo"));
 	//undoAction->setShortcuts(QKeySequence::Undo);
 
@@ -47,6 +49,8 @@ Qastle::Qastle(QWidget* parent) : QMainWindow(parent) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // REDO / UNDO
 void Qastle::slotRedo() {
+	// TODO: discard stack if another modification is done
+	// Seems automatically handled?
 	const TableModel* model = qobject_cast<const TableModel*>(m_currentTableView->model());
 	TableModel* modelNonConst = const_cast<TableModel*>(model);
 	modelNonConst->undoStack()->redo();
@@ -58,6 +62,15 @@ void Qastle::slotUndo() {
 	modelNonConst->undoStack()->undo();
 }
 
+void Qastle::slotClearCell() {
+	qDebug() << "suppr";
+	QItemSelectionModel* select = m_currentTableView->selectionModel();
+	if (select->hasSelection()) {
+		// TODO: handle multiple selection
+		m_currentTableView->model()->setData(select->currentIndex(), QVariant(), Qt::EditRole);
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // LOAD / SAVE
@@ -65,7 +78,7 @@ void Qastle::slotLoadFromJson() {
 	// TODO: "Do you want to save current session?"
 
 	QString fileName = QFileDialog::getOpenFileName(this, QString("Load file"), QString(), QString("JSON file (*.json);; Binary file (*.dat)"));
-	
+
 	// Dialog cancelled
 	if (fileName.isEmpty()) {
 		return;
@@ -337,7 +350,7 @@ void Qastle::showContextMenuSideHeader(const QPoint& pos) {
 	else {
 		actionAppendRow = new QAction(QString("Insert row"));
 	}
-	
+
 	actionAppendRow->setData(index);
 	(void)connect(actionAppendRow, &QAction::triggered, this, &Qastle::slotAppendRow);
 	menu->addAction(actionAppendRow);
