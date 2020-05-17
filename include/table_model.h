@@ -3,6 +3,9 @@
 #include <QWidget>
 #include <QAbstractTableModel>
 #include <QUndoStack>
+#include <QKeyEvent>
+#include <QTableView>
+
 
 #include "../include/utils.h"
 
@@ -27,6 +30,7 @@ private:
 	QVector <QVector <QVariant> > m_tableData;
 
 	QUndoStack* m_undoStack;
+	QTableView* m_tableView; // kind of hacky
 
 	void addTypeToTemplate(int column, const QastleType type, const QString headerName);
 	void addTypeToExistingData(int column, const QastleType type);
@@ -71,6 +75,9 @@ public:
 
 	QVector <QVector <QVariant> > tableData() const;
 	//void setTableData(const QVector <QVector <QVariant> >& tableData);
+
+	QTableView* tableView() const;
+	void setTableView(QTableView* tableView);
 
 	QString sheetName() const;
 	void setSheetName(const QString& sheetName);

@@ -298,6 +298,14 @@ void TableModel::setSheetName(const QString& sheetName) {
 	m_sheetName = sheetName;
 }
 
+QTableView* TableModel::tableView() const {
+	return m_tableView;
+}
+
+void TableModel::setTableView(QTableView* tableView) {
+	m_tableView = tableView;
+}
+
 QUndoStack* TableModel::undoStack() const {
 	return m_undoStack;
 }

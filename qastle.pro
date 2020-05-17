@@ -16,5 +16,6 @@ OBJECTS_DIR += ./x64/Release/objects_dir/
 UI_DIR += ./x64/Release/ui_dir/
 RCC_DIR += ./x64/Release/rcc_dir/
 QT += core gui widgets
+#win32:RC_ICONS += icon.ico
 
 include(qastle.pri)

@@ -40,6 +40,9 @@
     <QtMoc Include="include\column_dialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="include\table_view.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="src\commands\column_insert.cpp">
       <Filter>Source Files\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\table_view.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,5 +129,10 @@
     <ClInclude Include="include\commands\column_insert.h">
       <Filter>Header Files\commands</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

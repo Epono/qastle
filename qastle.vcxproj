@@ -98,6 +98,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\qastle.cpp" />
     <ClCompile Include="src\table_model.cpp" />
+    <ClCompile Include="src\table_view.cpp" />
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +117,13 @@
     <ClInclude Include="include\commands\row_insert.h" />
     <ClInclude Include="include\commands\row_remove.h" />
     <ClInclude Include="include\import_export.h" />
+    <QtMoc Include="include\table_view.h" />
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="x64\Debug\uic\ui\ui_column.h" />
     <ClInclude Include="x64\Debug\uic\ui\ui_qastle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
