@@ -74,6 +74,7 @@ bool Qastle::loadFromJson(const QString& fileName) {
 	m_tableViews.clear();
 
 	// Remove and delete old tabs (except not deleting "+" tab)
+	// TODO: Still useful with the way Qt manages memory?
 	int temp = 0;
 	while (ui.tabWidget->count() > 1) {
 		QWidget* tab = ui.tabWidget->widget(temp);
