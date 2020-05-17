@@ -29,17 +29,13 @@ private:
 
 	QVector <QVector <QVariant> > m_tableData;
 
-	QUndoStack* m_undoStack;
-	QTableView* m_tableView; // kind of hacky
-
-	void addTypeToTemplate(int column, const QastleType type, const QString headerName);
-	void addTypeToExistingData(int column, const QastleType type);
+	std::unique_ptr<QUndoStack> m_undoStack;
 
 public:
-	void addFirstColumnAndRow();
-
-	// OVERRIDE
 	TableModel(QObject* parent = nullptr);
+	~TableModel();
+
+	void addFirstColumnAndRow();
 
 	Qt::ItemFlags flags(const QModelIndex& index) const;
 
@@ -76,15 +72,15 @@ public:
 	QVector <QVector <QVariant> > tableData() const;
 	//void setTableData(const QVector <QVector <QVariant> >& tableData);
 
-	QTableView* tableView() const;
-	void setTableView(QTableView* tableView);
-
 	QString sheetName() const;
 	void setSheetName(const QString& sheetName);
 
 	QUndoStack* undoStack() const;
-	void setUndoStack(QUndoStack* undoStack);
 
 	// TEMP
 	void addDummyData();
+
+private:
+	void addTypeToTemplate(int column, const QastleType type, const QString headerName);
+	void addTypeToExistingData(int column, const QastleType type);
 };

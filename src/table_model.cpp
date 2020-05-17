@@ -45,9 +45,10 @@ void TableModel::addFirstColumnAndRow() {
 
 TableModel::TableModel(QObject* parent) {
 	m_sheetName = QString("New sheet");
-
-	m_undoStack = new QUndoStack(this);
+	m_undoStack = std::make_unique<QUndoStack>(this);
 }
+
+TableModel::~TableModel() = default;
 
 Qt::ItemFlags TableModel::flags(const QModelIndex& index) const {
 	return (QAbstractItemModel::flags(index) | Qt::ItemFlag::ItemIsEditable) & (~Qt::ItemFlag::ItemIsUserCheckable);
@@ -298,18 +299,6 @@ void TableModel::setSheetName(const QString& sheetName) {
 	m_sheetName = sheetName;
 }
 
-QTableView* TableModel::tableView() const {
-	return m_tableView;
-}
-
-void TableModel::setTableView(QTableView* tableView) {
-	m_tableView = tableView;
-}
-
 QUndoStack* TableModel::undoStack() const {
-	return m_undoStack;
-}
-
-void TableModel::setUndoStack(QUndoStack* undoStack) {
-	m_undoStack = undoStack;
+	return m_undoStack.get();
 }

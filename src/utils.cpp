@@ -1,6 +1,7 @@
 #include "../include/utils.h"
 
 #include <QStringList>
+#include <QFileInfo>
 #include <QDebug>
 
 QString Utils::getTypeIdFromType(const QastleType& type, const QString& data) {
@@ -92,4 +93,8 @@ QastleType Utils::getTypeFromStringType(const QString& data) {
 		qDebug() << QString("[getTypeFromStringType] Type not found: %1").arg(typeNumber);
 		return QastleType::TUnknown;
 	}
+}
+
+bool Utils::fileExists(const QString& path) {
+	return QFileInfo::exists(path) && QFileInfo(path).isFile();
 }

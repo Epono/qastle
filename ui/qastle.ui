@@ -87,8 +87,6 @@
    <addaction name="separator"/>
    <addaction name="actionCheck"/>
    <addaction name="separator"/>
-   <addaction name="actionUndo"/>
-   <addaction name="actionRedo"/>
    <addaction name="separator"/>
    <addaction name="actionQuit"/>
   </widget>
@@ -125,28 +123,6 @@
    </property>
    <property name="toolTip">
     <string>Check</string>
-   </property>
-  </action>
-  <action name="actionUndo">
-   <property name="text">
-    <string>Undo</string>
-   </property>
-   <property name="toolTip">
-    <string>Undo</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+1</string>
-   </property>
-  </action>
-  <action name="actionRedo">
-   <property name="text">
-    <string>Redo</string>
-   </property>
-   <property name="toolTip">
-    <string>Redo</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+2</string>
    </property>
   </action>
  </widget>

@@ -2,16 +2,20 @@
 #include <QTableView>
 
 #include "../include/table_model.h"
+#include "../include/column_dialog.h"
 
 class TableView : public QTableView
 {
 	Q_OBJECT
 
 private:
-	TableModel* m_tableModel;
+	std::unique_ptr<TableModel> m_tableModel;
+	std::unique_ptr<ColumnDialog> m_columnDialog;
+	std::unique_ptr<QMenu> m_menu;
 
 public:
-	TableView(TableModel* tableModel);
+	TableView(TableModel* tableModel, QWidget* parent = Q_NULLPTR);
+	~TableView();
 
 	void clearCell(const QModelIndex& index);
 	void copyCell(const QModelIndex& index);
@@ -21,6 +25,8 @@ public:
 	void redo();
 
 	void openModalAddColumn(const int selectedColumnIndex);
+
+	TableModel* tableModel() const;
 
 public slots:
 	void keyPressEvent(QKeyEvent* event);
@@ -42,4 +48,3 @@ public slots:
 	void topHeaderDoubleClicked(int logicalIndex);
 	void sideHeaderDoubleClicked(int logicalIndex);
 };
-

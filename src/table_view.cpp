@@ -1,7 +1,5 @@
 #include "../include/table_view.h"
 
-#include "../include/column_dialog.h"
-
 #include <QClipboard>
 #include <QApplication>
 #include <QHeaderView>
@@ -10,28 +8,31 @@
 #include <QInputDialog>
 #include <QDebug>
 
-TableView::TableView(TableModel* tableModel) : QTableView(), m_tableModel(tableModel) {
-	setModel(m_tableModel);
+// TODO: no need for make_unique?
+TableView::TableView(TableModel* tableModel, QWidget* parent) : QTableView(parent), m_tableModel(tableModel) {
+	setModel(m_tableModel.get());
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 	verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 	verticalHeader()->setMinimumWidth(20);
 
-	(void)connect(this, &QWidget::customContextMenuRequested, this, &TableView::showContextMenuGrid);
+	connect(this, &QWidget::customContextMenuRequested, this, &TableView::showContextMenuGrid);
 
 	// HEADERS
-	(void)connect(horizontalHeader(), &QWidget::customContextMenuRequested, this, &TableView::showContextMenuTopHeader);
-	(void)connect(horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &TableView::topHeaderDoubleClicked);
+	connect(horizontalHeader(), &QWidget::customContextMenuRequested, this, &TableView::showContextMenuTopHeader);
+	connect(horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &TableView::topHeaderDoubleClicked);
 
-	(void)connect(verticalHeader(), &QWidget::customContextMenuRequested, this, &TableView::showContextMenuSideHeader);
-	(void)connect(verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &TableView::sideHeaderDoubleClicked);
+	connect(verticalHeader(), &QWidget::customContextMenuRequested, this, &TableView::showContextMenuSideHeader);
+	connect(verticalHeader(), &QHeaderView::sectionDoubleClicked, this, &TableView::sideHeaderDoubleClicked);
 	//
 }
 
+TableView::~TableView() = default;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // SLOTS
-void TableView::keyPressEvent(QKeyEvent* event)
+void TableView::keyPressEvent(QKeyEvent * event)
 {
 	QItemSelectionModel* select = selectionModel();
 
@@ -68,16 +69,16 @@ void TableView::keyPressEvent(QKeyEvent* event)
 	}
 }
 
-void TableView::clearCell(const QModelIndex& index) {
+void TableView::clearCell(const QModelIndex & index) {
 	m_tableModel->setData(index, QVariant(), Qt::EditRole);
 }
 
-void TableView::copyCell(const QModelIndex& index) {
+void TableView::copyCell(const QModelIndex & index) {
 	// TODO: toString() enough?
 	QApplication::clipboard()->setText(m_tableModel->data(index).toString());
 }
 
-void TableView::pasteCell(const QModelIndex& index) {
+void TableView::pasteCell(const QModelIndex & index) {
 	QastleType type = m_tableModel->dataModel()[index.column()];
 
 	switch (type)
@@ -112,44 +113,45 @@ void TableView::redo() {
 ///////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // GRID
-void TableView::showContextMenuGrid(const QPoint& pos) {
+void TableView::showContextMenuGrid(const QPoint & pos) {
 	QModelIndex index = indexAt(pos);
 
-	QMenu* menu = new QMenu(this);
+	m_menu = std::make_unique<QMenu>(this);
+
 	// TODO: voir si ça peut pas déborder par la droite
 	if (index.isValid()) {
 		// Sur une des lignes
-		menu->addAction(new QAction(QString("Col %1").arg(index.column()), this));
-		menu->addAction(new QAction(QString("Row %1").arg(index.row()), this));
+		m_menu->addAction(new QAction(QString("Col %1").arg(index.column()), this));
+		m_menu->addAction(new QAction(QString("Row %1").arg(index.row()), this));
 	}
 	else {
 		// En dehors des lignes
-		menu->addAction(new QAction("Insert line", this));
+		m_menu->addAction(new QAction("Insert line", this));
 	}
 
-	menu->popup(viewport()->mapToGlobal(pos));
+	m_menu->popup(viewport()->mapToGlobal(pos));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // HORIZONTAL HEADER
 
-void TableView::showContextMenuTopHeader(const QPoint& pos) {
+void TableView::showContextMenuTopHeader(const QPoint & pos) {
 	QModelIndex index = indexAt(pos);
 
-	QMenu* menu = new QMenu(this);
+	m_menu = std::make_unique<QMenu>(this);
 
 	QAction* actionAppendColumn;
 
 	if (index.isValid()) {
 		QAction* actionRemoveColumn = new QAction(QString("Remove column %1").arg(index.column()), this);
 		actionRemoveColumn->setData(index);
-		(void)connect(actionRemoveColumn, &QAction::triggered, this, &TableView::slotRemoveColumn);
-		menu->addAction(actionRemoveColumn);
+		connect(actionRemoveColumn, &QAction::triggered, this, &TableView::slotRemoveColumn);
+		m_menu->addAction(actionRemoveColumn);
 
 		QAction* actionPrependColumn = new QAction(QString("Insert before column %1").arg(index.column()), this);
 		actionPrependColumn->setData(index);
-		(void)connect(actionPrependColumn, &QAction::triggered, this, &TableView::slotPrependColumn);
-		menu->addAction(actionPrependColumn);
+		connect(actionPrependColumn, &QAction::triggered, this, &TableView::slotPrependColumn);
+		m_menu->addAction(actionPrependColumn);
 
 		actionAppendColumn = new QAction(QString("Insert after column %1").arg(index.column()), this);
 	}
@@ -158,10 +160,10 @@ void TableView::showContextMenuTopHeader(const QPoint& pos) {
 	}
 
 	actionAppendColumn->setData(index);
-	(void)connect(actionAppendColumn, &QAction::triggered, this, &TableView::slotAppendColumn);
-	menu->addAction(actionAppendColumn);
+	connect(actionAppendColumn, &QAction::triggered, this, &TableView::slotAppendColumn);
+	m_menu->addAction(actionAppendColumn);
 
-	menu->popup(viewport()->mapToGlobal(pos));
+	m_menu->popup(viewport()->mapToGlobal(pos));
 }
 
 void TableView::slotRemoveColumn() {
@@ -182,10 +184,10 @@ void TableView::slotAppendColumn() {
 
 // https://stackoverflow.com/questions/13116863/qt-show-modal-dialog-ui-on-menu-item-click
 void TableView::openModalAddColumn(const int selectedColumnIndex = -1) {
-	auto dialog = new ColumnDialog(this, selectedColumnIndex);
+	m_columnDialog = std::make_unique<ColumnDialog>(this, selectedColumnIndex);
 
-	(void)connect(dialog, &ColumnDialog::finishedWithData, this, &TableView::slotColumnDialogAccepted);
-	dialog->show();
+	connect(m_columnDialog.get(), &ColumnDialog::finishedWithData, this, &TableView::slotColumnDialogAccepted);
+	m_columnDialog->show();
 }
 
 void TableView::slotColumnDialogAccepted(const int selectedColumnIndex, const QVariant data, const QString headerName) {
@@ -210,23 +212,23 @@ void TableView::topHeaderDoubleClicked(int logicalIndex) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // VERTICAL HEADER
-void TableView::showContextMenuSideHeader(const QPoint& pos) {
+void TableView::showContextMenuSideHeader(const QPoint & pos) {
 	QModelIndex index = indexAt(pos);
 
-	QMenu* menu = new QMenu(this);
+	m_menu = std::make_unique<QMenu>(this);
 
 	QAction* actionAppendRow;
 
 	if (index.isValid()) {
 		QAction* actionRemoveRow = new QAction(QString("Remove row %1").arg(index.row()), this);
 		actionRemoveRow->setData(index);
-		(void)connect(actionRemoveRow, &QAction::triggered, this, &TableView::slotRemoveRow);
-		menu->addAction(actionRemoveRow);
+		connect(actionRemoveRow, &QAction::triggered, this, &TableView::slotRemoveRow);
+		m_menu->addAction(actionRemoveRow);
 
 		QAction* actionPrependRow = new QAction(QString("Insert before row %1").arg(index.row()), this);
 		actionPrependRow->setData(index);
-		(void)connect(actionPrependRow, &QAction::triggered, this, &TableView::slotPrependRow);
-		menu->addAction(actionPrependRow);
+		connect(actionPrependRow, &QAction::triggered, this, &TableView::slotPrependRow);
+		m_menu->addAction(actionPrependRow);
 
 		actionAppendRow = new QAction(QString("Insert after row %1").arg(index.row()), this);
 	}
@@ -235,10 +237,10 @@ void TableView::showContextMenuSideHeader(const QPoint& pos) {
 	}
 
 	actionAppendRow->setData(index);
-	(void)connect(actionAppendRow, &QAction::triggered, this, &TableView::slotAppendRow);
-	menu->addAction(actionAppendRow);
+	connect(actionAppendRow, &QAction::triggered, this, &TableView::slotAppendRow);
+	m_menu->addAction(actionAppendRow);
 
-	menu->popup(viewport()->mapToGlobal(pos));
+	m_menu->popup(viewport()->mapToGlobal(pos));
 }
 
 // https://stackoverflow.com/questions/28646914/qaction-with-custom-parameter
@@ -266,4 +268,11 @@ void TableView::sideHeaderDoubleClicked(int logicalIndex) {
 	else {
 		// TODO: handle double click on row number
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////::
+// Accessors
+
+TableModel* TableView::tableModel() const {
+	return m_tableModel.get();
 }

@@ -132,5 +132,7 @@ public:
 
 	// TODO: Template
 	//static QVariant valueFromType(const QMetaType::Type& type, const QVariant& value);
+
+	static bool fileExists(const QString& path);
 };
 

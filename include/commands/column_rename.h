@@ -1,11 +1,12 @@
 #pragma once
 
+#include "../table_model.h"
+
 #include <QUndoStack>
 #include <QVector>
 #include <QVariant>
 #include <QModelIndex>
 #include <QDebug>
-#include "../table_model.h"
 
 class ColumnRename : public QUndoCommand
 {
