@@ -4,6 +4,8 @@
 ## Task List
 - [x] Basic editor functions
   - [ ] Support Undo/Redo
+    - [x] Basic Undo/Redo in same sheet
+    - [ ] Undo/Redo in multiple sheets (sheet names, cross-referenced data)
   - [ ] Detect unsaved changes
   - [ ] Separators
   - [ ] Sheets
@@ -11,7 +13,7 @@
     - [x] Support multiple sheets
     - [x] Add
     - [x] Edit (change name)
-    - [ ] Remove
+    - [x] Remove
     - [ ] Move
   - [ ] Colums
     - [x] Add
@@ -24,6 +26,8 @@
     - [x] Remove
     - [ ] Move
     - [ ] Copy/Paste
+      - [x] Single cell
+      - [ ] Multiple cells
 - [ ] Support all types
   - [ ] Unique Identifier
   - [x] Text
